@@ -17,8 +17,12 @@ prefage_of  <- function(age, sex, gap) age + gap * (sex == 0)
 is_agyw_vec <- function(sex, age, active) active == 1 & sex == 0 & age >= 15 & age < 25
 
 # ---- Network builder: heterosexual + age-disparate -------------------------
+# mix_main/mix_cas = mean |pref.age difference| target (years). LARGER = wider
+# age mixing = AGYW get a realistic tail of much-older ("blesser") partners,
+# exposing the youngest women to the high-prevalence older-men pool.
 build_hetage_network <- function(N, age_gap = 5, deg_main = 0.5, deg_cas = 0.3,
                                  conc_main = 0.04, conc_cas = 0.10,
+                                 mix_main = 3, mix_cas = 4,
                                  dur_main = 200, dur_cas = 26, prop_male = 0.5,
                                  drate = 0.0005) {
   nw  <- network_initialize(N)
@@ -28,10 +32,10 @@ build_hetage_network <- function(N, age_gap = 5, deg_main = 0.5, deg_cas = 0.3,
   nw  <- set_vertex_attribute(nw, "age", age)
   nw  <- set_vertex_attribute(nw, "pref.age", prefage_of(age, sex, age_gap))
   f <- ~edges + offset(nodematch("sex")) + concurrent + absdiff("pref.age")
-  est_main <- netest(nw, f, c(deg_main * N / 2, round(conc_main * N), (deg_main * N / 2) * 3),
+  est_main <- netest(nw, f, c(deg_main * N / 2, round(conc_main * N), (deg_main * N / 2) * mix_main),
                      dissolution_coefs(~offset(edges), dur_main, drate),
                      coef.form = -Inf, verbose = FALSE)
-  est_cas  <- netest(nw, f, c(deg_cas * N / 2, round(conc_cas * N), (deg_cas * N / 2) * 4),
+  est_cas  <- netest(nw, f, c(deg_cas * N / 2, round(conc_cas * N), (deg_cas * N / 2) * mix_cas),
                      dissolution_coefs(~offset(edges), dur_cas, drate),
                      coef.form = -Inf, verbose = FALSE)
   list(est_main = est_main, est_cas = est_cas)

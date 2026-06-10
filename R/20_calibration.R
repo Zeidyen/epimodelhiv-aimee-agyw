@@ -23,18 +23,23 @@ TARGETS <- c(f_15_19 = 0.054, f_20_24 = 0.124,
 # Pass 3 showed susc at fixed beta=0.008 runs away (AGYW infect men -> feedback ->
 # whole epidemic explodes). beta and susc are coupled: beta = overall level,
 # susc = women-vs-men ratio. Grid jointly (lower beta to offset the susc boost).
-N       <- 1000
-BURN_YR <- 35
+# Pass 5: with the wider age-mixing (mix=8), AGYW reach the older high-prev men,
+# so less susceptibility should be needed. Focused grid.
+N       <- 1200
+BURN_YR <- 33
 nsteps  <- BURN_YR * 52
 nsims   <- 1
-BETA_GRID <- c(0.0045, 0.0055, 0.0065)
-SUSC_GRID <- c(1.5, 2.0, 2.5)
+BETA_GRID <- c(0.0050, 0.0060, 0.0070)
+SUSC_GRID <- c(1.0, 1.5)
 
 cat(sprintf("Calibration: N=%d, burn-in=%dyr (%d steps), %d beta x %d susc cells\n\n",
             N, BURN_YR, nsteps, length(BETA_GRID), length(SUSC_GRID)))
 
 set.seed(20)
-ests <- build_hetage_network(N, age_gap = 5, deg_main = 0.5, deg_cas = 0.35)
+# mix_main=8 (mean partner-age gap ~7.7y, 34% of AGYW partners 30+) — exposes the
+# youngest women to the high-prevalence older men (the structural fix).
+ests <- build_hetage_network(N, age_gap = 5, deg_main = 0.5, deg_cas = 0.35,
+                             mix_main = 8, mix_cas = 9)
 
 distance <- function(sim_prev) {
   s <- sapply(names(TARGETS), function(k) if (!is.null(sim_prev[[k]])) sim_prev[[k]] else NA)
@@ -58,5 +63,5 @@ cat(sprintf("\n=== Best fit: beta=%.4f, agyw.susc.mult=%.1f (RMSE=%.3f) ===\n", 
 cat("  band      target   simulated\n")
 for (k in names(TARGETS))
   cat(sprintf("  %-8s  %.3f    %.3f\n", k, TARGETS[k], best$prev[[k]] %||% NA))
-saveRDS(results, file.path(".", "results", "calibration_pass4.rds"))
-cat("\nSaved results/calibration_pass4.rds\n")
+saveRDS(results, file.path(".", "results", "calibration_pass5.rds"))
+cat("\nSaved results/calibration_pass5.rds\n")
