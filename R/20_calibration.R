@@ -19,16 +19,16 @@ TARGETS <- c(f_15_19 = 0.054, f_20_24 = 0.124,
              m_25_29 = 0.071, m_30_34 = 0.120,
              m_35_39 = 0.181, m_40_44 = 0.224)
 
-# ---- Settings (pass 3: AGYW susceptibility) --------------------------------
-# Pass 2 fit MEN well at beta=0.008 but AGYW ~3-8x too LOW: with age.gap=5, AGYW
-# partner men 20-29 (low prevalence), and young-women elevated susceptibility is
-# absent. Hold beta=0.008 and grid the AGYW susceptibility multiplier.
-N       <- 1200
-BURN_YR <- 38
+# ---- Settings (pass 4: JOINT beta x AGYW-susceptibility grid) ---------------
+# Pass 3 showed susc at fixed beta=0.008 runs away (AGYW infect men -> feedback ->
+# whole epidemic explodes). beta and susc are coupled: beta = overall level,
+# susc = women-vs-men ratio. Grid jointly (lower beta to offset the susc boost).
+N       <- 1000
+BURN_YR <- 35
 nsteps  <- BURN_YR * 52
 nsims   <- 1
-BETA    <- 0.0080
-GRID    <- c(2.0, 3.0, 4.0, 5.0)   # agyw.susc.mult candidates
+BETA_GRID <- c(0.0045, 0.0055, 0.0065)
+SUSC_GRID <- c(1.5, 2.0, 2.5)
 
 cat(sprintf("Calibration: N=%d, burn-in=%dyr (%d steps), %d inf.prob.act values\n\n",
             N, BURN_YR, nsteps, length(GRID)))
@@ -42,21 +42,21 @@ distance <- function(sim_prev) {
 }
 
 results <- list()
-for (s in GRID) {
-  p <- hetage_param(inf.prob.act = BETA, age.gap = 5, agyw.susc.mult = s,
+for (b in BETA_GRID) for (s in SUSC_GRID) {
+  p <- hetage_param(inf.prob.act = b, age.gap = 5, agyw.susc.mult = s,
                     chatbot.reach = 0, chatbot.test.rr = 1, chatbot.prep.rr = 1)
   sim <- run_hetage(p, ests, N, nsteps, nsims)
   sp  <- equil_prev(sim, tail_steps = 52)
   d   <- distance(sp)
-  results[[as.character(s)]] <- list(susc = s, prev = sp, rmse = d)
-  cat(sprintf("agyw.susc=%.1f  RMSE=%.3f  | f15-19=%.3f f20-24=%.3f m30-34=%.3f m35-39=%.3f\n",
-              s, d, sp$f_15_19 %||% NA, sp$f_20_24 %||% NA, sp$m_30_34 %||% NA, sp$m_35_39 %||% NA))
+  results[[sprintf("b%.4f_s%.1f", b, s)]] <- list(beta = b, susc = s, prev = sp, rmse = d)
+  cat(sprintf("beta=%.4f susc=%.1f  RMSE=%.3f  | f15-19=%.3f f20-24=%.3f m30-34=%.3f m35-39=%.3f\n",
+              b, s, d, sp$f_15_19 %||% NA, sp$f_20_24 %||% NA, sp$m_30_34 %||% NA, sp$m_35_39 %||% NA))
 }
 
 best <- results[[which.min(sapply(results, function(r) r$rmse))]]
-cat(sprintf("\n=== Best fit: beta=%.4f, agyw.susc.mult=%.1f (RMSE=%.3f) ===\n", BETA, best$susc, best$rmse))
+cat(sprintf("\n=== Best fit: beta=%.4f, agyw.susc.mult=%.1f (RMSE=%.3f) ===\n", best$beta, best$susc, best$rmse))
 cat("  band      target   simulated\n")
 for (k in names(TARGETS))
   cat(sprintf("  %-8s  %.3f    %.3f\n", k, TARGETS[k], best$prev[[k]] %||% NA))
-saveRDS(results, file.path(".", "results", "calibration_pass3.rds"))
-cat("\nSaved results/calibration_pass3.rds\n")
+saveRDS(results, file.path(".", "results", "calibration_pass4.rds"))
+cat("\nSaved results/calibration_pass4.rds\n")
