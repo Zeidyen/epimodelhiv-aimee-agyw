@@ -40,7 +40,33 @@ From `ficus_risk_assessments`, field **`num_sexual_partners`** =
    *ages*, so the **age-disparate gap** (AGYW ↔ older men) still comes from SA
    age-mixing literature, not this dataset.
 
-## What Aimee still provides (to extract next)
-- **Intervention effect sizes** — chatbot effect on HIV testing & PrEP uptake,
-  from `clover_connection_to_care`, `ficus_self_tests`, and patient
-  `experiment_groups` / `subgroup` (trial arm), applying the same-day rule above.
+## Intervention effect sizes (the model's chatbot levers)
+From `section3_analysis.py` Cox models (timing-corrected, same-day excluded,
+N = 9,310). Exposure = **meaningful engagement (≥2 active days) vs single-day
+users**, adjusted for registration month:
+
+| Outcome | Hazard ratio (95% CI) | Model lever |
+|---|---|---|
+| HIV testing | **2.11** (1.87–2.39) | `chatbot.test.rr` |
+| PrEP initiation | **2.22** (1.88–2.63) | `chatbot.prep.rr` |
+
+HRs are hazard-rate ratios → map directly onto the model's per-step
+`test.rate` / `prep.start.rate`.
+
+**Causal-fraction scenario grid** (raw HR is associational; apply a fraction):
+| Scenario | causal % | test.rr | prep.rr |
+|---|---|---|---|
+| Conservative | 25% | 1.28 | 1.31 |
+| Central | 50% | 1.55 | 1.61 |
+| Optimistic | 100% | 2.11 | 2.22 |
+
+### Effect-size limitations (state explicitly)
+1. **No no-chatbot control.** The `experiment_groups` field is a small (~977 of
+   10,194) embedded "info-collection" sub-experiment (502 control / 475 test),
+   NOT a chatbot-vs-none arm. So the effect is the **engagement gradient**
+   (≥2 vs 1 active day) — **associational**, self-selection confounded. Hence the
+   causal-fraction range; never quote the raw HR as the chatbot's causal effect.
+2. **Reach = meaningful engagement.** The effect attaches to AGYW who reach ≥2
+   active days, so the model's `reach` parameter = fraction of AGYW who become
+   meaningful engagers, not merely those who open Aimee once.
+3. Adjusted only for registration month (not full confounder set).

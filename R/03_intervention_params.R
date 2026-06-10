@@ -3,13 +3,21 @@
 # These are AGGREGATE inputs only — no patient-level data here.
 
 # ---- 1. Observed (associational) effects from the Clover cohort ------------
-# TODO: fill from the empirical analysis (point estimate + CI).
-# Example placeholders (NOT real):
+# From section3_analysis.py Cox models (timing-corrected, same-day excluded,
+# N = 9,310). Exposure = MEANINGFUL ENGAGEMENT (>=2 active days) vs single-day
+# users, adjusted for registration month. HRs are hazard-rate ratios, which map
+# directly onto the model's per-step test.rate / prep.start.rate.
+#
+# INTERPRETATION: the effect applies to AGYW who become *meaningful engagers*,
+# so the model's `reach` = fraction of AGYW who reach >=2 active days on Aimee
+# (not merely those who open it once).
 obs_effect <- list(
-  testing_rate_RR = 1.40,   # relative increase in HIV-testing rate among users
-  prep_init_RR    = 1.60,   # relative increase in PrEP initiation among eligible
-  prep_persist_RR = 1.15    # relative increase in PrEP persistence (if supported)
+  testing_rate_RR = 2.11,   # HR_hiv  (95% CI 1.87-2.39, p~4e-32)
+  prep_init_RR    = 2.22,   # HR_prep (95% CI 1.88-2.63, p~1e-20)
+  prep_persist_RR = NA_real_  # not estimated in main analysis
 )
+# Associational (single-arm cohort, no no-chatbot control) -> self-selection
+# confounded -> apply ONLY a causal fraction (below), never the raw HR.
 
 # ---- 2. Causal-fraction scenarios ------------------------------------------
 # Observed effects are confounded by self-selection; apply only a FRACTION as
