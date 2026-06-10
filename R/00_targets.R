@@ -39,11 +39,14 @@ cal_targets <- list(
     testing_rate_agyw    = NA_real_   # TODO: baseline testing interval/rate
   ),
 
-  # Network targets (ERGM/tergm) — all TODO from SA behaviour data
+  # Network targets (ERGM/tergm)
   network = list(
-    mean_degree_main_f_15_24   = NA_real_,
-    mean_degree_casual_f_15_24 = NA_real_,
-    age_gap_mean_agyw          = NA_real_,  # years; age-disparate driver
+    # From Aimee data (past-year partner count; see calibration/AIMEE_DERIVED.md).
+    # NOTE: past-year count, not concurrent degree -> calibration TARGET not input.
+    partners_pastyr_agyw       = 1.71,     # mean past-year sexual partners, women 15-24
+    pct_2plus_partners_agyw    = 0.35,     # concurrency-relevant fraction
+    # Still from SA literature (Aimee lacks partner ages / partnership durations):
+    age_gap_mean_agyw          = NA_real_, # years; age-disparate driver (external)
     duration_main_days         = NA_real_,
     duration_casual_days       = NA_real_
   ),
