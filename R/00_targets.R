@@ -5,20 +5,27 @@
 
 cal_targets <- list(
 
-  # HIV prevalence (proportion) by age/sex group
+  # HIV prevalence (proportion) by age/sex group.
+  # SABSSM = survey (empirical); THEMBISA v5.0 (2022) = national model (primary).
   prevalence = list(
-    f_15_19 = 0.056,
-    f_20_24 = 0.080,
-    m_15_19 = 0.030,
-    m_20_24 = 0.040,
-    m_25_34 = NA_real_,   # TODO: older male partners — from SABSSM age x sex table
-    national_all = 0.127
+    f_15_19 = 0.056,      # SABSSM (Thembisa 0.054 — agree)
+    f_20_24 = 0.080,      # SABSSM survey; NOTE Thembisa models 0.124 (higher)
+    m_15_19 = 0.030,      # SABSSM
+    m_20_24 = 0.040,      # SABSSM
+    national_all = 0.127, # SABSSM
+    # Older-men partner pool (the DRIVER) — Thembisa v5.0, 2022:
+    thembisa_f_15_19 = 0.054,
+    thembisa_f_20_24 = 0.124,
+    thembisa_m_25_29 = 0.071,
+    thembisa_m_30_34 = 0.120,
+    thembisa_m_35_39 = 0.181,
+    thembisa_m_40_44 = 0.224
   ),
 
   # HIV incidence (per person-year)
   incidence = list(
-    youth_15_24_bothsex = 0.0039,
-    f_15_24             = NA_real_   # TODO: AGYW-specific — KEY target (Thembisa)
+    youth_15_24_bothsex = 0.0039,  # SABSSM (both sexes; loose validation)
+    f_15_24             = 0.0096    # Thembisa v5.0 2022, AGYW women (0.96/100PY)
   ),
 
   # Treatment cascade
@@ -45,8 +52,11 @@ cal_targets <- list(
     # NOTE: past-year count, not concurrent degree -> calibration TARGET not input.
     partners_pastyr_agyw       = 1.71,     # mean past-year sexual partners, women 15-24
     pct_2plus_partners_agyw    = 0.35,     # concurrency-relevant fraction
-    # Still from SA literature (Aimee lacks partner ages / partnership durations):
-    age_gap_mean_agyw          = NA_real_, # years; age-disparate driver (external)
+    # Age gap: SA literature. Age-disparate defined as partner >=5y older
+    # (Maughan-Brown); AGYW with such partners ~1.9x HIV risk (HPTN 068).
+    # Mean gap ~5y used as the model default; refine with SABSSM behaviour data.
+    age_gap_mean_agyw          = 5,        # years (literature-informed default)
+    # Partnership durations still to source (SA behaviour / EpiModelHIV-SSA papers):
     duration_main_days         = NA_real_,
     duration_casual_days       = NA_real_
   ),

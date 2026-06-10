@@ -24,16 +24,35 @@ province-stratified values where available.
 | PrEP coverage | Sexually active AGYW | **4%** (2022; was 0.1% in 2018) | Thembisa v4.6 |
 | National HIV prevalence | All ages | **12.7%** (~7.8M PLHIV) | SABSSM VI 2022 |
 
-## B. Still to source (from primary reports)
+## B. RESOLVED via Thembisa v5.0 (Age-specific outputs, 2022) + Aimee
 
-| Target | Why it matters | Likely source |
-|---|---|---|
-| HIV **incidence in women 15–24 specifically** | The 0.39% is both-sexes-combined; AGYW incidence is higher and is the model's key calibration target | Thembisa age/sex outputs; SABSSM women-only |
-| HIV prevalence **men 25–34 / 25–39** | Older male partners are the AGYW infection source — must be calibrated | SABSSM VI full report (age×sex table) |
-| **Partnership degree** (main / casual) by age/sex | ERGM mean-degree target | SA behaviour surveys / SABSSM behaviour module |
-| **Age-mixing / age-gap** for AGYW partnerships | Sets the age-disparate transmission that drives AGYW incidence | SABSSM; age-disparate-sex literature |
-| **Partnership duration** (main / casual) | tergm dissolution coefficients | SA behaviour surveys |
-| Baseline **HIV-testing rate/interval** AGYW | Pre-chatbot testing parameter | DHIS; DHS |
+Downloaded from thembisa.org → Downloads → "Age-specific National and Provincial
+Model Outputs" v5.0 (`/content/filedl/AgeOutputs5_0`; sheet `SA`, year col 38=2022).
+
+| Target | Value | Source | Status |
+|---|---|---|---|
+| Women 15–24 **incidence** | **0.96 / 100 PY** | Thembisa 2022 | ✅ (was the key gap) |
+| Men **25–29** prevalence | 7.1% | Thembisa | ✅ driver |
+| Men **30–34** prevalence | 12.0% | Thembisa | ✅ driver |
+| Men **35–39** prevalence | 18.1% | Thembisa | ✅ driver |
+| Men **40–44** prevalence | 22.4% | Thembisa | ✅ driver |
+| Women 15–19 / 20–24 prevalence | 5.4% / 12.4% | Thembisa | ✅ (Thembisa 20–24 > SABSSM 8.0%) |
+| **Partnership degree** (AGYW) | 1.71 past-yr | **Aimee** | ✅ (see AIMEE_DERIVED.md) |
+| **Age gap** (AGYW↔older men) | ~5 yr (≥5y = disparate) | Maughan-Brown / HPTN 068 | ✅ literature default |
+
+> The older-men prevalence rise (7%→12%→18%→22% across 25–44) is the quantified
+> age-disparate driver: AGYW partner up the curve into a far higher-prevalence pool.
+
+### Still outstanding (minor)
+| Target | Source |
+|---|---|
+| Baseline AGYW HIV-testing rate | Aimee (derivable) or DHIS/DHS; or fit as free param |
+| Partnership **durations** (main / casual) | SA behaviour / EpiModelHIV-SSA papers |
+
+### Note on Thembisa vs SABSSM (women 20–24)
+Thembisa models 12.4%, SABSSM survey measured 8.0%. Calibrate to **Thembisa**
+(primary, age/sex/year consistent) and report SABSSM as the empirical cross-check;
+flag the gap in limitations.
 
 ## Notes
 - **Thembisa** = SA's official national HIV model — primary anchor for incidence/prevalence by age & sex; pull the version-matched age/sex spreadsheets for B.
