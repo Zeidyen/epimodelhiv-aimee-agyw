@@ -30,8 +30,8 @@ nsims   <- 1
 BETA_GRID <- c(0.0045, 0.0055, 0.0065)
 SUSC_GRID <- c(1.5, 2.0, 2.5)
 
-cat(sprintf("Calibration: N=%d, burn-in=%dyr (%d steps), %d inf.prob.act values\n\n",
-            N, BURN_YR, nsteps, length(GRID)))
+cat(sprintf("Calibration: N=%d, burn-in=%dyr (%d steps), %d beta x %d susc cells\n\n",
+            N, BURN_YR, nsteps, length(BETA_GRID), length(SUSC_GRID)))
 
 set.seed(20)
 ests <- build_hetage_network(N, age_gap = 5, deg_main = 0.5, deg_cas = 0.35)
