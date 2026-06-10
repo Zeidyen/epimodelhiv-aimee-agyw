@@ -23,14 +23,14 @@ TARGETS <- c(f_15_19 = 0.054, f_20_24 = 0.124,
 # Pass 3 showed susc at fixed beta=0.008 runs away (AGYW infect men -> feedback ->
 # whole epidemic explodes). beta and susc are coupled: beta = overall level,
 # susc = women-vs-men ratio. Grid jointly (lower beta to offset the susc boost).
-# Pass 5: with the wider age-mixing (mix=8), AGYW reach the older high-prev men,
-# so less susceptibility should be needed. Focused grid.
+# Pass 6: mix=8 fixed; men are calibrated, women ~2x low. Push AGYW
+# susceptibility (wider mixing should dampen the pass-3 feedback runaway).
 N       <- 1200
 BURN_YR <- 33
 nsteps  <- BURN_YR * 52
 nsims   <- 1
-BETA_GRID <- c(0.0050, 0.0060, 0.0070)
-SUSC_GRID <- c(1.0, 1.5)
+BETA_GRID <- c(0.0060, 0.0070)
+SUSC_GRID <- c(2.0, 2.5, 3.0)
 
 cat(sprintf("Calibration: N=%d, burn-in=%dyr (%d steps), %d beta x %d susc cells\n\n",
             N, BURN_YR, nsteps, length(BETA_GRID), length(SUSC_GRID)))
@@ -63,5 +63,5 @@ cat(sprintf("\n=== Best fit: beta=%.4f, agyw.susc.mult=%.1f (RMSE=%.3f) ===\n", 
 cat("  band      target   simulated\n")
 for (k in names(TARGETS))
   cat(sprintf("  %-8s  %.3f    %.3f\n", k, TARGETS[k], best$prev[[k]] %||% NA))
-saveRDS(results, file.path(".", "results", "calibration_pass5.rds"))
-cat("\nSaved results/calibration_pass5.rds\n")
+saveRDS(results, file.path(".", "results", "calibration_pass6.rds"))
+cat("\nSaved results/calibration_pass6.rds\n")

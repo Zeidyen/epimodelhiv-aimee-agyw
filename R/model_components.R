@@ -61,7 +61,7 @@ infect_track <- function(dat, at) {
   rd <- get_param(dat,"rel.inf.aids"); ru <- get_param(dat,"rel.inf.art.unsupp")
   rs <- get_param(dat,"rel.inf.art.supp"); pe <- get_param(dat,"prep.efficacy")
   acts <- c(get_param(dat,"acts.main"), get_param(dat,"acts.casual"))
-  susc <- get_param(dat,"agyw.susc.mult")
+  susc15 <- get_param(dat,"agyw.susc.15_19"); susc20 <- get_param(dat,"agyw.susc.20_24")
 
   all_new <- integer(0)
   for (k in 1:2) {
@@ -71,10 +71,14 @@ infect_track <- function(dat, at) {
     stage_mult <- ifelse(!is.na(stg)&stg=="acute", ra, ifelse(!is.na(stg)&stg=="aids", rd, 1))
     art_mult <- ifelse(art==1&sup==1, rs, ifelse(art==1&sup==0, ru, 1))
     p_act <- ipa * stage_mult * art_mult
-    # susceptible-side: PrEP protection + AGYW elevated susceptibility
+    # susceptible-side: PrEP protection + age-graded young-women susceptibility
+    # (15-19 carry the highest per-contact HIV acquisition risk, then 20-24).
     p_act <- p_act * ifelse(prep.status[del$sus]==1, 1-pe, 1)
-    is_agyw_sus <- sex[del$sus]==0 & age[del$sus]>=15 & age[del$sus]<25
-    p_act <- p_act * ifelse(is_agyw_sus, susc, 1)
+    s_sex <- sex[del$sus]; s_age <- age[del$sus]
+    smult <- rep(1, length(s_sex))
+    smult[s_sex==0 & s_age>=15 & s_age<20] <- susc15
+    smult[s_sex==0 & s_age>=20 & s_age<25] <- susc20
+    p_act <- p_act * smult
     p_act <- pmax(pmin(p_act,1),0)
     p_edge <- 1 - (1-p_act)^acts[k]
     tr <- rbinom(length(p_edge),1,p_edge)==1
@@ -208,12 +212,14 @@ prep_agyw <- function(dat, at) {
 }
 
 # ---- Parameter constructor + run helper ------------------------------------
-hetage_param <- function(inf.prob.act = 0.0025, age.gap = 5, agyw.susc.mult = 1,
+hetage_param <- function(inf.prob.act = 0.0025, age.gap = 5,
+                         agyw.susc.15_19 = 1, agyw.susc.20_24 = 1,
                          test.rate = 0.01, prep.init.cov = 0.02, prep.start.rate = 0.005,
                          chatbot.reach = 0, chatbot.test.rr = 1, chatbot.prep.rr = 1,
                          prop.male = 0.5, arrival.rate = 0.0010, ...) {
   param.net(
-    inf.prob.act = inf.prob.act, agyw.susc.mult = agyw.susc.mult,
+    inf.prob.act = inf.prob.act,
+    agyw.susc.15_19 = agyw.susc.15_19, agyw.susc.20_24 = agyw.susc.20_24,
     rel.inf.acute = 5, rel.inf.aids = 2,
     rel.inf.art.unsupp = 0.30, rel.inf.art.supp = 0.01, prep.efficacy = 0.95,
     acts.main = 3, acts.casual = 1,
@@ -239,9 +245,10 @@ run_hetage <- function(param, ests, N, nsteps, nsims = 1, i.num = NULL) {
   netsim(list(ests$est_main, ests$est_cas), param, init.net(i.num = i.num), ctrl)
 }
 
-# Equilibrium prevalence by band = mean over the last `tail_steps` steps.
+# Equilibrium prevalence by band = mean over the last `tail_steps` steps,
+# averaged across simulations (out="mean") to reduce stochastic noise.
 equil_prev <- function(sim, tail_steps = 52) {
-  df <- as.data.frame(sim)
+  df <- tryCatch(as.data.frame(sim, out = "mean"), error = function(e) as.data.frame(sim))
   out <- list()
   for (nm in names(.PREV_BANDS)) {
     col <- paste0("prev.", nm)
