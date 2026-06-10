@@ -1,0 +1,22 @@
+# R
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+
+# Model outputs
+results/*
+!results/.gitkeep
+
+# Data — never commit patient-level or de-identified individual records
+data/*.csv
+data/*.rds
+data/*.dta
+data/*.sav
+data/raw/
+
+# OS / editor
+.DS_Store
+.vscode/
+*.swp
