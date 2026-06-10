@@ -43,22 +43,57 @@ build_hetage_network <- function(N, age_gap = 5, deg_main = 0.5, deg_cas = 0.3,
   m_25_29 = c(1, 25, 29), m_30_34 = c(1, 30, 34),
   m_35_39 = c(1, 35, 39), m_40_44 = c(1, 40, 44))
 
+# Full transmission module = gallery infect() logic + AGYW susceptibility
+# multiplier (young women acquire at agyw.susc.mult x the per-act rate;
+# biological + behavioural elevated risk) + age/sex-band tracking.
 infect_track <- function(dat, at) {
-  dat <- infect(dat, at)
-  sex <- get_attr(dat, "sex"); age <- get_attr(dat, "age")
-  active <- get_attr(dat, "active"); status <- get_attr(dat, "status")
-  infTime <- get_attr(dat, "infTime")
-  # AGYW incidence this step
+  active <- get_attr(dat,"active"); status <- get_attr(dat,"status")
+  stage <- get_attr(dat,"stage"); art.status <- get_attr(dat,"art.status")
+  vl.supp <- get_attr(dat,"vl.supp"); prep.status <- get_attr(dat,"prep.status")
+  infTime <- get_attr(dat,"infTime"); stage.time <- get_attr(dat,"stage.time")
+  sex <- get_attr(dat,"sex"); age <- get_attr(dat,"age")
+
+  ipa <- get_param(dat,"inf.prob.act"); ra <- get_param(dat,"rel.inf.acute")
+  rd <- get_param(dat,"rel.inf.aids"); ru <- get_param(dat,"rel.inf.art.unsupp")
+  rs <- get_param(dat,"rel.inf.art.supp"); pe <- get_param(dat,"prep.efficacy")
+  acts <- c(get_param(dat,"acts.main"), get_param(dat,"acts.casual"))
+  susc <- get_param(dat,"agyw.susc.mult")
+
+  all_new <- integer(0)
+  for (k in 1:2) {
+    del <- discord_edgelist(dat, at, network = k)
+    if (is.null(del) || nrow(del) == 0) next
+    stg <- stage[del$inf]; art <- art.status[del$inf]; sup <- vl.supp[del$inf]
+    stage_mult <- ifelse(!is.na(stg)&stg=="acute", ra, ifelse(!is.na(stg)&stg=="aids", rd, 1))
+    art_mult <- ifelse(art==1&sup==1, rs, ifelse(art==1&sup==0, ru, 1))
+    p_act <- ipa * stage_mult * art_mult
+    # susceptible-side: PrEP protection + AGYW elevated susceptibility
+    p_act <- p_act * ifelse(prep.status[del$sus]==1, 1-pe, 1)
+    is_agyw_sus <- sex[del$sus]==0 & age[del$sus]>=15 & age[del$sus]<25
+    p_act <- p_act * ifelse(is_agyw_sus, susc, 1)
+    p_act <- pmax(pmin(p_act,1),0)
+    p_edge <- 1 - (1-p_act)^acts[k]
+    tr <- rbinom(length(p_edge),1,p_edge)==1
+    if (any(tr)) all_new <- c(all_new, del$sus[tr])
+  }
+  all_new <- unique(all_new); n_new <- length(all_new)
+  if (n_new > 0) {
+    status[all_new] <- "i"; stage[all_new] <- "acute"; stage.time[all_new] <- 0L
+    infTime[all_new] <- at; prep.status[all_new] <- 0L
+    dat <- set_attr(dat,"status",status); dat <- set_attr(dat,"stage",stage)
+    dat <- set_attr(dat,"stage.time",stage.time); dat <- set_attr(dat,"infTime",infTime)
+    dat <- set_attr(dat,"prep.status",prep.status)
+  }
+  dat <- set_epi(dat,"si.flow",at,n_new)
+
+  # ---- tracking ----
   agyw <- sex == 0 & age >= 15 & age < 25
-  dat <- set_epi(dat, "incid.agyw", at, sum(active == 1 & status == "i" &
-                   !is.na(infTime) & infTime == at & agyw))
-  dat <- set_epi(dat, "agyw.py", at, sum(active == 1 & agyw & status == "s"))  # susceptible PY
-  # prevalence by age/sex band
+  dat <- set_epi(dat, "incid.agyw", at, sum(active==1 & status=="i" & !is.na(infTime) & infTime==at & agyw))
+  dat <- set_epi(dat, "agyw.py", at, sum(active==1 & agyw & status=="s"))
   for (nm in names(.PREV_BANDS)) {
     b <- .PREV_BANDS[[nm]]
-    inb <- active == 1 & sex == b[1] & age >= b[2] & age <= b[3]
-    dat <- set_epi(dat, paste0("prev.", nm), at,
-                   if (sum(inb) > 0) sum(inb & status == "i") / sum(inb) else NA_real_)
+    inb <- active==1 & sex==b[1] & age>=b[2] & age<=b[3]
+    dat <- set_epi(dat, paste0("prev.",nm), at, if (sum(inb)>0) sum(inb & status=="i")/sum(inb) else NA_real_)
   }
   dat
 }
@@ -169,12 +204,13 @@ prep_agyw <- function(dat, at) {
 }
 
 # ---- Parameter constructor + run helper ------------------------------------
-hetage_param <- function(inf.prob.act = 0.0025, age.gap = 5,
+hetage_param <- function(inf.prob.act = 0.0025, age.gap = 5, agyw.susc.mult = 1,
                          test.rate = 0.01, prep.init.cov = 0.02, prep.start.rate = 0.005,
                          chatbot.reach = 0, chatbot.test.rr = 1, chatbot.prep.rr = 1,
                          prop.male = 0.5, arrival.rate = 0.0010, ...) {
   param.net(
-    inf.prob.act = inf.prob.act, rel.inf.acute = 5, rel.inf.aids = 2,
+    inf.prob.act = inf.prob.act, agyw.susc.mult = agyw.susc.mult,
+    rel.inf.acute = 5, rel.inf.aids = 2,
     rel.inf.art.unsupp = 0.30, rel.inf.art.supp = 0.01, prep.efficacy = 0.95,
     acts.main = 3, acts.casual = 1,
     acute.to.chronic.rate = 1/12, chronic.to.aids.rate = 1/520, aids.depart.rate = 1/104,
