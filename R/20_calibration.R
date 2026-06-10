@@ -19,12 +19,15 @@ TARGETS <- c(f_15_19 = 0.054, f_20_24 = 0.124,
              m_25_29 = 0.071, m_30_34 = 0.120,
              m_35_39 = 0.181, m_40_44 = 0.224)
 
-# ---- Settings (COARSE first pass) ------------------------------------------
-N       <- 1500
-BURN_YR <- 25
+# ---- Settings (pass 2: refined grid around the endemic band) ---------------
+# Diagnostic showed beta=0.006 fades (R0~1) and beta=0.015 is hyperendemic, so
+# the ~12-15% target sits near beta ~0.008-0.010. Longer burn-in to approach
+# the measurement-point prevalence.
+N       <- 1200
+BURN_YR <- 38
 nsteps  <- BURN_YR * 52
 nsims   <- 1
-GRID    <- c(0.0015, 0.0025, 0.0035, 0.0045, 0.0060)   # inf.prob.act candidates
+GRID    <- c(0.0070, 0.0080, 0.0090, 0.0100, 0.0110)   # inf.prob.act candidates
 
 cat(sprintf("Calibration: N=%d, burn-in=%dyr (%d steps), %d inf.prob.act values\n\n",
             N, BURN_YR, nsteps, length(GRID)))
