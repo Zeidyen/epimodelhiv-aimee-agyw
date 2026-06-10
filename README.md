@@ -42,33 +42,49 @@ This model propagates those behavioural changes to **population HIV incidence**.
   self-selection, so they enter as a **scenario range** (conservative / central /
   optimistic), never a single causal point estimate.
 
+## Model foundation
+
+The study builds on the **EpiModel Gallery "HIV Transmission with Care Cascade
+and PrEP"** model (MIT licensed, runs on current **EpiModel 2.6.x**) — vendored
+in `R/base_model/`. It already provides a generalized-epidemic main+casual
+network, a 95-95-95 care cascade (the **testing** lever), and **PrEP**
+(initiation/discontinuation), with infections-averted scenario output.
+
+> An earlier attempt to extend the EpiModelHIV 1.5.0 heterosexual module was
+> abandoned — that module has no PrEP, a broken constructor, and is pinned to a
+> 2018-era engine incompatible with current EpiModel. See `FINDINGS.md`; the
+> code is preserved in `R/legacy_het_extension/`.
+
 ## Repository layout
 
 ```
 R/
-  01_network_estimation.R   ERGM/tergm sexual-network fit (statnet)
-  02_calibration.R          epidemic calibration to SA AGYW targets
-  03_intervention_params.R  map chatbot effect sizes → model parameters
-  04_scenarios.R            run the effect × reach scenario grid
-  05_analysis.R             outcomes: infections averted, incidence reduction
+  base_model/               vendored EpiModel-Gallery HIV+PrEP model (the foundation)
+    model.R, module-fx.R    upstream (unmodified); PROVENANCE.md + ADAPTATION.md
+  00_targets.R              SA calibration targets as a structured object
+  01-05_*.R                 network / calibration / intervention / scenarios / analysis
+  legacy_het_extension/     abandoned EpiModelHIV-1.5 het extension (kept for record)
 calibration/
-  targets.md                SA calibration targets + data sources
+  targets.md                SA calibration targets + data sources (SABSSM VI, Thembisa)
 data/
   README.md                 data sources (NO patient-level data is committed)
 results/                    model outputs (gitignored)
 PROTOCOL.md                 full study protocol / analysis plan
+FINDINGS.md                 engineering findings (why we changed foundation)
 ```
 
 ## Software
 
 - R (≥ 4.2)
-- [`EpiModel`](https://cran.r-project.org/package=EpiModel),
-  [`EpiModelHIV`](https://github.com/EpiModel/EpiModelHIV),
+- [`EpiModel`](https://cran.r-project.org/package=EpiModel) (2.6.x) +
   [`statnet`](https://statnet.org/) (`ergm`, `tergm`, `networkDynamic`)
+- No `EpiModelHIV` needed — the base model in `R/base_model/` runs on plain
+  EpiModel via custom modules.
 
 ```r
-install.packages("EpiModel")
-remotes::install_github("EpiModel/EpiModelHIV")
+install.packages("EpiModel")          # pulls in statnet (ergm/tergm)
+# run the foundation model:
+#   from repo root:  Rscript R/base_model/model.R
 ```
 
 ## Data & ethics
