@@ -31,15 +31,34 @@ signals the transmission structure is too sparse to sustain a generalized epidem
 robustly — most likely **effective connectivity too low** (Aimee degree + literature
 acts put HIV right at its sustainability threshold).
 
+## UPDATE — time-trend restructure solved the knife-edge
+Switched from equilibrium cross-section to the **standard SA approach: fit the
+prevalence trajectory 1990-2022** (`R/30_timetrend.R`): seed 0.8% in 1990,
+time-varying ART scale-up (`cascade_tt`, ramp 2004-2014), run 33 yr, fit the
+women-15-24 curve to Thembisa.
+
+Findings:
+- With **acts-per-partnership raised to 5/2** (coital frequency; the legitimate
+  lever once degree is fixed by Aimee data), the epidemic **grows robustly off
+  the threshold** and reproduces the **rise → peak → ART-driven decline shape**.
+  The near-critical knife-edge is GONE.
+- Note: concurrency is bounded by mean degree (can't exceed it) — raising it
+  broke the ERGM; acts is the right lever instead.
+- Level is set by β: acts=5/2 with β≈0.006 → peak ~50%; β≈0.003 → peak ~10%.
+  Target peak ~16% sits near **β≈0.004**.
+- **Right regime located: acts=5/2, β≈0.004.** But the AGYW band is a small
+  subgroup (~125 at N=1000) so single-sim prevalence is noisy — can't pin β
+  precisely at this scale.
+
 ## Recommended path to a final calibration
-1. **Make the epidemic robustly endemic** (move it off the threshold) before fitting:
-   raise concurrency and/or acts-per-partnership and/or untreated infectious
-   duration so prevalence is stable to small β changes. Re-check against the Aimee
-   degree constraint.
-2. **Fix a production N** large enough that finite-size effects stabilize (N≥5000).
-3. **Use a proper optimizer** — ABC-SMC or Bayesian optimization over
-   (β, mix, susc_15_19, susc_20_24), with multi-sim averaging, parallelized across
-   cores. Hand-grids are inadequate for a 4-parameter near-critical fit.
+1. ✅ **Robust endemicity achieved** via acts=5/2 + the time-trend structure.
+2. **Run at production scale** — N≥3000–5000 with multi-sim averaging, so the AGYW
+   subgroup is large enough for a smooth trajectory (single-sim N=1000 is too noisy
+   to pin β). Parallelize across cores; this is a long (overnight-scale) job.
+3. **Optimize over (β, acts)** to the full trajectory (women 15-24 AND adult 15-49)
+   — ABC-SMC or a fine β sweep at production N. Right regime is acts=5/2, β≈0.004.
+4. Then run the 2022 age/sex cross-section check (the `00_targets.R` bands) and the
+   intervention scenarios on the calibrated baseline.
 
 ## Limitations to state in the manuscript
 - Preliminary, uncalibrated-at-production-scale; absolute numbers illustrative.

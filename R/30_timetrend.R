@@ -89,7 +89,9 @@ ests <- build_hetage_network(N, age_gap=5, deg_main=0.5, deg_cas=0.35,
                              conc_main=0.04, conc_cas=0.10, mix_main=8, mix_cas=9)
 
 run_one <- function(beta) {
-  p <- hetage_param(inf.prob.act=beta, age.gap=5, acts.main=3, acts.casual=1,
+  # acts 5/2 keeps the epidemic robustly endemic (off near-critical); LOW beta
+  # brings the LEVEL down to the ~16% target peak.
+  p <- hetage_param(inf.prob.act=beta, age.gap=5, acts.main=5, acts.casual=2,
                     agyw.susc.15_19=2.0, agyw.susc.20_24=1.5,
                     sim.start.year=START_YEAR, art.start.year=2004, art.full.year=2014)
   sim <- run_tt(p, ests, N, nsteps, nsims=1, i.num=round(0.008*N))
@@ -97,7 +99,7 @@ run_one <- function(beta) {
 }
 
 res <- list()
-for (beta in c(0.0025, 0.0035, 0.0045)) {
+for (beta in c(0.0015, 0.0020, 0.0025, 0.0030)) {
   tr <- run_one(beta); tr$beta <- beta; res[[as.character(beta)]] <- tr
   pk <- max(tr$women_15_24, na.rm=TRUE)
   cat(sprintf("beta=%.3f: women15-24 1995=%.3f 2002=%.3f 2022=%.3f (peak %.3f)\n",
