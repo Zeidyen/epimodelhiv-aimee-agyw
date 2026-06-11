@@ -68,7 +68,8 @@ prep_int <- function(dat, at) {
   for(k in 1:2){ el<-get_edgelist(dat,network=k); if(is.null(el)||nrow(el)==0) next
     td<-td+get_degree(el); pp[el[,2][status[el[,1]]=="i"]]<-TRUE; pp[el[,1][status[el[,2]]=="i"]]<-TRUE }
   agyw <- active==1 & sex==0 & age>=15 & age<25
-  indic <- active==1 & status=="s" & (td>=prep.indic.deg | pp | (agyw & chatbot==1))
+  cb.on <- yr >= p$chatbot.start.year   # chatbot PrEP-eligibility only after launch (keeps pre-2025 paired)
+  indic <- active==1 & status=="s" & (td>=prep.indic.deg | pp | (agyw & chatbot==1 & cb.on))
   ni<-is.na(prep.status)&active==1
   if(any(ni)){prep.status[ni]<-0L; if(prep.init.cov>0){ii<-which(ni&indic); if(length(ii)) prep.status[ii]<-rbinom(length(ii),1,prep.init.cov)}}
   sv<-rep(prep.start.rate,n); sv[agyw & chatbot==1]<-pmin(1,prep.start.rate*rr)
@@ -142,11 +143,15 @@ base_col <- M[,"baseline"]; base_med <- median(base_col, na.rm=TRUE)
 rows <- list()
 for (j in 2:length(scns)) {
   sc <- scns[[j]]; averted <- base_col - M[,j]   # PAIRED by sim
+  am <- median(averted, na.rm=TRUE)
+  n_reached <- sc$reach * NATIONAL_AGYW           # national AGYW reached by Aimee
+  nnr <- if (am > 0) n_reached / am else NA       # AGYW reached per infection averted
   rows[[length(rows)+1]] <- data.frame(reach=sc$reach, causal=sub("^r\\d+_","",sc$id),
-    averted_med=median(averted,na.rm=TRUE), averted_lo=quantile(averted,.025,na.rm=TRUE),
-    averted_hi=quantile(averted,.975,na.rm=TRUE), pct_med=100*median(averted,na.rm=TRUE)/base_med)
-  cat(sprintf("%s: averted %.0f [%.0f, %.0f] (%.1f%%)\n", sc$id, median(averted,na.rm=TRUE),
-      quantile(averted,.025,na.rm=TRUE), quantile(averted,.975,na.rm=TRUE), 100*median(averted,na.rm=TRUE)/base_med))
+    averted_med=am, averted_lo=quantile(averted,.025,na.rm=TRUE),
+    averted_hi=quantile(averted,.975,na.rm=TRUE), pct_med=100*am/base_med,
+    reached=n_reached, nnr=nnr)
+  cat(sprintf("%s: averted %.0f [%.0f, %.0f] (%.1f%%) | %.0f AGYW reached/infection averted\n",
+      sc$id, am, quantile(averted,.025,na.rm=TRUE), quantile(averted,.975,na.rm=TRUE), 100*am/base_med, nnr))
 }
 res <- do.call(rbind, rows)
 res$causal <- factor(res$causal, levels=c("conservative","central","optimistic"))
