@@ -1,7 +1,18 @@
 # Calibration status
 
-Honest state of the baseline calibration (no-chatbot) to SA 2022 prevalence.
-All runs were local (laptop, single-core, N≤2000, ≤3 sims).
+## ✅ ACHIEVED — preliminary calibrated baseline (time-trend)
+The model reproduces the SA HIV trajectory 1990-2022. Calibrated via the
+time-trend method with a 25-yr demographic burn-in (HIV-free 1965-1990) then HIV
+seeded in 1990; N=3000, 3 sims. **Best fit: β=0.0035, trajectory RMSE=0.031**
+(fits women 15-24 AND adult 15-49). Parameters in `R/calibrated_params.R`.
+Residuals: early-1990s rise lags slightly; adult peak ~2-3pp high. Single
+best-β point (no posterior yet). `results/production_fit.png`.
+
+---
+
+Honest state of the baseline calibration (no-chatbot) to SA prevalence.
+History below documents the journey (equilibrium → time-trend). All runs local
+(single-core).
 
 ## What is done
 - **Model structure complete & verified** — heterosexual, age-disparate (AGYW↔older
