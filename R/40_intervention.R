@@ -111,10 +111,16 @@ ests <- build_hetage_network(N, age_gap=CP$age.gap, deg_main=CP$deg_main, deg_ca
                              conc_main=CP$conc_main, conc_cas=CP$conc_cas, mix_main=CP$mix_main, mix_cas=CP$mix_cas)
 
 tasks <- expand.grid(s=seq_along(scns), i=1:NSIMS)
+# progress markers: each task writes results/progress/<k>.done when finished
+PROG <- "results/progress"; unlink(PROG, recursive=TRUE); dir.create(PROG, recursive=TRUE, showWarnings=FALSE)
+writeLines(as.character(nrow(tasks)), "results/progress_total.txt")
 cat(sprintf("Running %d tasks (%d scenarios x %d sims) on %d cores...\n", nrow(tasks), length(scns), NSIMS, NCORES))
+t0 <- Sys.time()
 vals <- mclapply(seq_len(nrow(tasks)), function(k){
   sc <- scns[[tasks$s[k]]]
-  tryCatch(run_one(sc$reach, sc$trr, sc$prr, BASE_SEED + tasks$i[k], ests), error=function(e) NA_real_)
+  v <- tryCatch(run_one(sc$reach, sc$trr, sc$prr, BASE_SEED + tasks$i[k], ests), error=function(e) NA_real_)
+  cat(sprintf("%s\tsim%d\t%.0f\n", sc$id, tasks$i[k], v), file=file.path(PROG, paste0(k,".done")))
+  v
 }, mc.cores=NCORES)
 tasks$inf <- unlist(vals)
 
