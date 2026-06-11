@@ -20,9 +20,12 @@ THEMBISA <- data.frame(
   women_15_24 = c(0.0083,0.0243,0.0541,0.0936,0.1288,0.1514,0.1603,0.1591,0.1526,
                   0.1448,0.1372,0.1281,0.1202,0.1143,0.108,0.0996,0.0897))
 START_YEAR <- 1990
+BURNIN_YR  <- 25                 # demographic/network settle, HIV-free
+FIRST_YEAR <- START_YEAR - BURNIN_YR   # sim clock starts 1965
+SEED_TICK  <- BURNIN_YR*52 + 1   # HIV seeded in 1990
 
 art_scale <- function(at, p) {
-  yr <- p$sim.start.year + (at-1)/52; s0<-p$art.start.year; s1<-p$art.full.year
+  yr <- p$first.year + (at-1)/52; s0<-p$art.start.year; s1<-p$art.full.year
   if (yr<=s0) return(0); if (yr>=s1) return(1); (yr-s0)/(s1-s0)
 }
 cascade_tt <- function(dat, at) {
@@ -55,17 +58,19 @@ run_tt <- function(param, ests, N, nsteps, nsims) {
     aging.FUN=aging_mod, infection.FUN=infect_track, progress.FUN=progress,
     cascade.FUN=cascade_tt, prep.FUN=prep_agyw, departures.FUN=dfunc,
     arrivals.FUN=afunc_hetage, verbose=FALSE)
-  netsim(list(ests$est_main, ests$est_cas), param, init.net(i.num=round(0.008*N)), ctrl)
+  # i.num=0: start HIV-free; demographic/network burn-in then HIV seeded at SEED_TICK
+  netsim(list(ests$est_main, ests$est_cas), param, init.net(i.num=0), ctrl)
 }
-# both trajectories per year (mid-year, averaged across sims)
-traj2 <- function(sim, nyears) {
+# both trajectories per CALENDAR year (mid-year, averaged across sims); only 1990+
+traj2 <- function(sim) {
   df <- tryCatch(as.data.frame(sim, out="mean"), error=function(e) as.data.frame(sim))
   out <- data.frame()
-  for (y in 0:(nyears-1)) {
-    s <- min(y*52+26, nrow(df))
+  for (yr in seq(START_YEAR, 2022)) {
+    s <- (yr - FIRST_YEAR)*52 + 26   # mid-year tick on the 1965-based clock
+    if (s > nrow(df)) next
     w <- mean(c(df$prev.f_15_19[s], df$prev.f_20_24[s]), na.rm=TRUE)
     a <- df$prev.adult_15_49[s] %||% NA
-    out <- rbind(out, data.frame(year=START_YEAR+y, women_15_24=w, adult_15_49=a))
+    out <- rbind(out, data.frame(year=yr, women_15_24=w, adult_15_49=a))
   }
   out
 }
@@ -79,7 +84,7 @@ traj_rmse <- function(tr) {
 
 # ---- Production settings ----------------------------------------------------
 set.seed(31)
-N <- 3000; NYEARS <- 33; nsteps <- NYEARS*52; nsims <- 3
+N <- 3000; nsteps <- (BURNIN_YR + 33)*52; nsims <- 3   # 25yr burn-in + 1990-2022
 ests <- build_hetage_network(N, age_gap=5, deg_main=0.5, deg_cas=0.35,
                              conc_main=0.04, conc_cas=0.10, mix_main=8, mix_cas=9)
 BETAS <- c(0.0035, 0.0040, 0.0045, 0.0050)
@@ -88,9 +93,10 @@ res <- list()
 for (b in BETAS) {
   p <- hetage_param(inf.prob.act=b, age.gap=5, acts.main=5, acts.casual=2,
                     agyw.susc.15_19=2.0, agyw.susc.20_24=1.5,
-                    sim.start.year=START_YEAR, art.start.year=2004, art.full.year=2014)
+                    seed.tick=SEED_TICK, seed.prev=0.008,
+                    first.year=FIRST_YEAR, art.start.year=2004, art.full.year=2014)
   sim <- run_tt(p, ests, N, nsteps, nsims)
-  tr <- traj2(sim, NYEARS); tr$beta <- b
+  tr <- traj2(sim); tr$beta <- b
   rm <- traj_rmse(tr); res[[as.character(b)]] <- list(beta=b, tr=tr, rmse=rm)
   cat(sprintf("beta=%.4f trajRMSE=%.3f | AGYW peak=%.3f 2022=%.3f | adult peak=%.3f 2022=%.3f\n",
       b, rm, max(tr$women_15_24,na.rm=TRUE), tr$women_15_24[tr$year==2022]%||%NA,

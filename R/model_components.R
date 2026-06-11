@@ -63,6 +63,21 @@ infect_track <- function(dat, at) {
   acts <- c(get_param(dat,"acts.main"), get_param(dat,"acts.casual"))
   susc15 <- get_param(dat,"agyw.susc.15_19"); susc20 <- get_param(dat,"agyw.susc.20_24")
 
+  # Mid-sim HIV seeding (after a demographic/network burn-in): at the seed tick,
+  # infect seed.prev of active susceptibles. Before this there are no infecteds,
+  # so transmission is naturally off during burn-in.
+  seed.tick <- get_param(dat,"seed.tick")
+  if (!is.na(seed.tick) && at == seed.tick) {
+    sus <- which(active==1 & status=="s")
+    nseed <- round(get_param(dat,"seed.prev") * length(sus))
+    if (nseed > 0) {
+      ids <- sample(sus, nseed)
+      status[ids] <- "i"; stage[ids] <- "chronic"; stage.time[ids] <- 0L; infTime[ids] <- at
+      dat <- set_attr(dat,"status",status); dat <- set_attr(dat,"stage",stage)
+      dat <- set_attr(dat,"stage.time",stage.time); dat <- set_attr(dat,"infTime",infTime)
+    }
+  }
+
   all_new <- integer(0)
   for (k in 1:2) {
     del <- discord_edgelist(dat, at, network = k)
@@ -218,12 +233,14 @@ prep_agyw <- function(dat, at) {
 hetage_param <- function(inf.prob.act = 0.0025, age.gap = 5,
                          agyw.susc.15_19 = 1, agyw.susc.20_24 = 1,
                          acts.main = 3, acts.casual = 1,
+                         seed.tick = NA, seed.prev = 0.008,   # mid-sim HIV seeding
                          test.rate = 0.01, prep.init.cov = 0.02, prep.start.rate = 0.005,
                          chatbot.reach = 0, chatbot.test.rr = 1, chatbot.prep.rr = 1,
                          prop.male = 0.5, arrival.rate = 0.0010, ...) {
   param.net(
     inf.prob.act = inf.prob.act,
     agyw.susc.15_19 = agyw.susc.15_19, agyw.susc.20_24 = agyw.susc.20_24,
+    seed.tick = seed.tick, seed.prev = seed.prev,
     rel.inf.acute = 5, rel.inf.aids = 2,
     rel.inf.art.unsupp = 0.30, rel.inf.art.supp = 0.01, prep.efficacy = 0.95,
     acts.main = acts.main, acts.casual = acts.casual,
