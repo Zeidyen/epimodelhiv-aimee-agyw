@@ -111,9 +111,14 @@ infect_track <- function(dat, at) {
 
   # ---- tracking ----
   agyw <- sex == 0 & age >= 15 & age < 25
+  diag.status <- get_attr(dat, "diag.status")
   dat <- set_epi(dat, "incid.agyw", at, sum(active==1 & status=="i" & !is.na(infTime) & infTime==at & agyw))
   dat <- set_epi(dat, "agyw.py", at, sum(active==1 & agyw & status=="s"))     # susceptible AGYW
   dat <- set_epi(dat, "agyw.num", at, sum(active==1 & agyw))                  # all active AGYW (for national scaling)
+  # mechanism trackers (chatbot levers among AGYW)
+  dat <- set_epi(dat, "prep.agyw", at, sum(active==1 & agyw & status=="s" & prep.status==1))  # AGYW on PrEP
+  dat <- set_epi(dat, "agyw.hiv", at, sum(active==1 & agyw & status=="i"))                     # HIV+ AGYW
+  dat <- set_epi(dat, "agyw.dx",  at, sum(active==1 & agyw & status=="i" & diag.status==1))    # diagnosed HIV+ AGYW
   bands <- list(f_15_19=c(0,15,19), f_20_24=c(0,20,24), m_25_29=c(1,25,29),
                 m_30_34=c(1,30,34), m_35_39=c(1,35,39), m_40_44=c(1,40,44))
   for (nm in names(bands)) {
