@@ -113,8 +113,10 @@ infect_track <- function(dat, at) {
   agyw <- sex == 0 & age >= 15 & age < 25
   dat <- set_epi(dat, "incid.agyw", at, sum(active==1 & status=="i" & !is.na(infTime) & infTime==at & agyw))
   dat <- set_epi(dat, "agyw.py", at, sum(active==1 & agyw & status=="s"))
-  for (nm in names(.PREV_BANDS)) {
-    b <- .PREV_BANDS[[nm]]
+  bands <- list(f_15_19=c(0,15,19), f_20_24=c(0,20,24), m_25_29=c(1,25,29),
+                m_30_34=c(1,30,34), m_35_39=c(1,35,39), m_40_44=c(1,40,44))
+  for (nm in names(bands)) {
+    b <- bands[[nm]]
     inb <- active==1 & sex==b[1] & age>=b[2] & age<=b[3]
     dat <- set_epi(dat, paste0("prev.",nm), at, if (sum(inb)>0) sum(inb & status=="i")/sum(inb) else NA_real_)
   }
@@ -133,10 +135,10 @@ aging_mod <- function(dat, at) {
     cb[w] <- rbinom(length(w), 1, reach)
     dat <- set_attr(dat, "chatbot", cb)
   }
-  age <- age + 1 / WKS_YR
+  age <- age + 1 / 52                                  # weeks per year (self-contained)
   dat <- set_attr(dat, "age", age)
-  dat <- set_attr(dat, "pref.age", prefage_of(age, sex, gap))
-  out <- which(active == 1 & age >= AGE_OUT)
+  dat <- set_attr(dat, "pref.age", age + gap * (sex == 0))
+  out <- which(active == 1 & age >= 50)                # age-out at 50
   if (length(out) > 0) {
     active[out] <- 0L; dat <- set_attr(dat, "active", active)
     ex <- get_attr(dat, "exitTime"); ex[out] <- at; dat <- set_attr(dat, "exitTime", ex)
@@ -162,8 +164,8 @@ afunc_hetage <- function(dat, at) {
     dat <- append_attr(dat, "art.time", NA_integer_, nArr)
     dat <- append_attr(dat, "prep.status", 0L, nArr)
     dat <- append_attr(dat, "sex", s, nArr)
-    dat <- append_attr(dat, "age", rep(AGE_MIN, nArr), nArr)
-    dat <- append_attr(dat, "pref.age", prefage_of(rep(AGE_MIN, nArr), s, gap), nArr)
+    dat <- append_attr(dat, "age", rep(15, nArr), nArr)            # enter at 15
+    dat <- append_attr(dat, "pref.age", rep(15, nArr) + gap * (s == 0), nArr)
     dat <- append_attr(dat, "chatbot", as.integer(cb), nArr)
   }
   dat <- set_epi(dat, "arr.flow", at, nArr)
@@ -183,7 +185,7 @@ cascade_agyw <- function(dat, at) {
   diag0 <- diag.status; art0 <- art.status; supp0 <- vl.supp
   is_inf <- active == 1 & status == "i"
   trv <- rep(test.rate, length(active))
-  trv[is_agyw_vec(sex, age, active) & chatbot == 1] <- pmin(1, test.rate * rr)
+  trv[(active==1 & sex==0 & age>=15 & age<25) & chatbot == 1] <- pmin(1, test.rate * rr)
   idsu <- which(is_inf & diag0 == 0)
   if (length(idsu) > 0) {
     rates <- ifelse(!is.na(stage[idsu]) & stage[idsu] == "aids", aids.dx.rate, trv[idsu])
@@ -215,7 +217,7 @@ prep_agyw <- function(dat, at) {
     td <- td + get_degree(el)
     pp[el[,2][status[el[,1]]=="i"]] <- TRUE; pp[el[,1][status[el[,2]]=="i"]] <- TRUE
   }
-  agyw <- is_agyw_vec(sex, age, active)
+  agyw <- active==1 & sex==0 & age>=15 & age<25
   indic <- active==1 & status=="s" & (td>=prep.indic.deg | pp | (agyw & chatbot==1))
   ni <- is.na(prep.status) & active==1
   if (any(ni)) { prep.status[ni] <- 0L

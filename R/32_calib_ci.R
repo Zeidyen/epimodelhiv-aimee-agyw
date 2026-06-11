@@ -63,7 +63,7 @@ p <- hetage_param(inf.prob.act=CP$inf.prob.act, age.gap=CP$age.gap, acts.main=CP
                   agyw.susc.15_19=CP$agyw.susc.15_19, agyw.susc.20_24=CP$agyw.susc.20_24,
                   seed.tick=SEED_TICK, seed.prev=CP$seed.prev,
                   first.year=FIRST_YEAR, art.start.year=CP$art.start.year, art.full.year=CP$art.full.year)
-ctrl <- control.net(type=NULL, nsims=NSIMS, ncores=1, nsteps=nsteps, tergmLite=TRUE, resimulate.network=TRUE,
+ctrl <- control.net(type=NULL, nsims=NSIMS, ncores=10, nsteps=nsteps, tergmLite=TRUE, resimulate.network=TRUE,
   aging.FUN=aging_mod, infection.FUN=infect_track, progress.FUN=progress,
   cascade.FUN=cascade_tt, prep.FUN=prep_agyw, departures.FUN=dfunc, arrivals.FUN=afunc_hetage, verbose=FALSE)
 cat(sprintf("Running %d sims, N=%d, %d steps...\n", NSIMS, N, nsteps))
