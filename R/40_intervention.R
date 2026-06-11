@@ -23,7 +23,7 @@ CHATBOT_YEAR <- 2025; END_YEAR <- 2035
 NATIONAL_AGYW <- 5071746
 HR_TEST <- 2.11; HR_PREP <- 2.22
 BASE_SEED <- 40
-N <- 1500; NSIMS <- 12
+N <- 6000; NSIMS <- 12
 NCORES <- max(1, parallel::detectCores() - 2)
 
 # ---- self-contained modules: ART ramp + time-gated chatbot ------------------
