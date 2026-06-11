@@ -30,7 +30,9 @@ art_scale <- function(at, p) {
   if (yr<=s0) return(0); if (yr>=s1) return(1); (yr-s0)/(s1-s0)
 }
 cascade_tt <- function(dat, at) {
-  asc <- art_scale(at, dat$param)
+  p <- dat$param                                    # inline art_scale (worker-safe)
+  yr <- p$first.year + (at-1)/52; s0 <- p$art.start.year; s1 <- p$art.full.year
+  asc <- if (yr<=s0) 0 else if (yr>=s1) 1 else (yr-s0)/(s1-s0)
   active<-get_attr(dat,"active"); status<-get_attr(dat,"status"); stage<-get_attr(dat,"stage")
   diag.status<-get_attr(dat,"diag.status"); art.status<-get_attr(dat,"art.status")
   vl.supp<-get_attr(dat,"vl.supp"); art.time<-get_attr(dat,"art.time")
@@ -89,7 +91,7 @@ prev_adult <- function(d,yr){ s<-yr_step(yr); if(s>nrow(d)) return(NA); d$prev.a
 inc_women  <- function(d,yr){ s0<-yr_step(yr)-26; s1<-s0+51; if(s1>nrow(d)||s0<1) return(NA)
   ni<-sum(d$incid.agyw[s0:s1],na.rm=TRUE)       # new AGYW infections this year
   pw<-sum(d$agyw.py[s0:s1],na.rm=TRUE)          # susceptible person-WEEKS
-  if(pw<=0) NA else 100*52*ni/pw }              # per 100 person-YEARS (pw/52 = PY)
+  if(pw<=0) NA else 52*ni/pw }                  # incidence per PY (fraction; *100 = per 100 PY)
 
 yrs <- seq(START_YEAR,2022)
 PW <- collect(prev_women, yrs); PW$panel <- "Prevalence: women 15-24"
