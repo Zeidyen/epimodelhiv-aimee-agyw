@@ -133,7 +133,7 @@ aging_mod <- function(dat, at) {
   if (is.null(get_attr(dat, "chatbot", override.null.error = TRUE))) {
     reach <- get_param(dat, "chatbot.reach")
     cb <- rep(0L, length(active)); w <- which(sex == 0)
-    cb[w] <- rbinom(length(w), 1, reach)
+    cb[w] <- as.integer(runif(length(w)) < reach)   # runif always draws n -> RNG synced across reach (CRN pairing)
     dat <- set_attr(dat, "chatbot", cb)
   }
   age <- age + 1 / 52                                  # weeks per year (self-contained)
@@ -152,7 +152,7 @@ afunc_hetage <- function(dat, at) {
   nArr <- rpois(1, sum(active == 1) * get_param(dat, "arrival.rate"))
   if (nArr > 0) {
     s <- rbinom(nArr, 1, get_param(dat, "prop.male"))
-    cb <- ifelse(s == 0, rbinom(nArr, 1, get_param(dat, "chatbot.reach")), 0L)
+    cb <- as.integer(s == 0 & runif(nArr) < get_param(dat, "chatbot.reach"))  # runif: RNG synced across reach
     gap <- get_param(dat, "age.gap")
     dat <- append_core_attr(dat, at, nArr)
     dat <- append_attr(dat, "status", "s", nArr)

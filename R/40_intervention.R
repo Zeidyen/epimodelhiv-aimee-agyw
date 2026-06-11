@@ -94,9 +94,11 @@ run_one <- function(reach, trr, prr, seed, ests) {
     arrivals.FUN=afunc_hetage, verbose=FALSE)
   sim <- netsim(list(ests$est_main, ests$est_cas), p, init.net(i.num=0), ctrl)
   df <- as.data.frame(sim)
-  w <- ((CHATBOT_YEAR-FY)*52+1):((END_YEAR-FY)*52); w <- w[w<=nrow(df)]
+  w  <- ((CHATBOT_YEAR-FY)*52+1):((END_YEAR-FY)*52); w <- w[w<=nrow(df)]
+  wp <- ((2020-FY)*52+1):((CHATBOT_YEAR-FY)*52); wp <- wp[wp<=nrow(df)]  # pre-chatbot window
   scale <- NATIONAL_AGYW / mean(df$agyw.num[w], na.rm=TRUE)
-  sum(df$incid.agyw[w], na.rm=TRUE) * scale
+  c(post = sum(df$incid.agyw[w], na.rm=TRUE) * scale,
+    pre  = sum(df$incid.agyw[wp], na.rm=TRUE))   # raw pre-chatbot count (pairing check)
 }
 
 # ---- scenarios + (scenario x sim) task grid --------------------------------
@@ -118,15 +120,23 @@ cat(sprintf("Running %d tasks (%d scenarios x %d sims) on %d cores...\n", nrow(t
 t0 <- Sys.time()
 vals <- mclapply(seq_len(nrow(tasks)), function(k){
   sc <- scns[[tasks$s[k]]]
-  v <- tryCatch(run_one(sc$reach, sc$trr, sc$prr, BASE_SEED + tasks$i[k], ests), error=function(e) NA_real_)
-  cat(sprintf("%s\tsim%d\t%.0f\n", sc$id, tasks$i[k], v), file=file.path(PROG, paste0(k,".done")))
+  v <- tryCatch(run_one(sc$reach, sc$trr, sc$prr, BASE_SEED + tasks$i[k], ests),
+                error=function(e) c(post=NA_real_, pre=NA_real_))
+  cat(sprintf("%s\tsim%d\t%.0f\n", sc$id, tasks$i[k], v["post"]), file=file.path(PROG, paste0(k,".done")))
   v
 }, mc.cores=NCORES)
-tasks$inf <- unlist(vals)
 
-# matrix: rows=sims, cols=scenarios (paired by sim seed)
-M <- matrix(NA_real_, nrow=NSIMS, ncol=length(scns), dimnames=list(NULL, sapply(scns,`[[`,"id")))
-for (k in seq_len(nrow(tasks))) M[tasks$i[k], tasks$s[k]] <- tasks$inf[k]
+# matrices: rows=sims, cols=scenarios (paired by sim seed). M=post (national), Mpre=pre-chatbot
+ids <- sapply(scns,`[[`,"id")
+M    <- matrix(NA_real_, nrow=NSIMS, ncol=length(scns), dimnames=list(NULL, ids))
+Mpre <- matrix(NA_real_, nrow=NSIMS, ncol=length(scns), dimnames=list(NULL, ids))
+for (k in seq_len(nrow(tasks))) {
+  M[tasks$i[k], tasks$s[k]]    <- vals[[k]]["post"]
+  Mpre[tasks$i[k], tasks$s[k]] <- vals[[k]]["pre"]
+}
+# PAIRING CHECK: pre-chatbot infections must be identical across scenarios per sim
+pre_diff <- max(abs(sweep(Mpre, 1, Mpre[,"baseline"])), na.rm=TRUE)
+cat(sprintf("\n[pairing check] max |pre-chatbot diff vs baseline| = %.1f  (0 = perfectly paired)\n\n", pre_diff))
 base_col <- M[,"baseline"]; base_med <- median(base_col, na.rm=TRUE)
 
 rows <- list()
