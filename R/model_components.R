@@ -103,6 +103,9 @@ infect_track <- function(dat, at) {
     inb <- active==1 & sex==b[1] & age>=b[2] & age<=b[3]
     dat <- set_epi(dat, paste0("prev.",nm), at, if (sum(inb)>0) sum(inb & status=="i")/sum(inb) else NA_real_)
   }
+  # overall adult 15-49 prevalence (both sexes) for the trajectory fit
+  ad <- active==1 & age>=15 & age<=49
+  dat <- set_epi(dat, "prev.adult_15_49", at, if (sum(ad)>0) sum(ad & status=="i")/sum(ad) else NA_real_)
   dat
 }
 
