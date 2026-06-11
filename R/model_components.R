@@ -214,6 +214,7 @@ prep_agyw <- function(dat, at) {
 # ---- Parameter constructor + run helper ------------------------------------
 hetage_param <- function(inf.prob.act = 0.0025, age.gap = 5,
                          agyw.susc.15_19 = 1, agyw.susc.20_24 = 1,
+                         acts.main = 3, acts.casual = 1,
                          test.rate = 0.01, prep.init.cov = 0.02, prep.start.rate = 0.005,
                          chatbot.reach = 0, chatbot.test.rr = 1, chatbot.prep.rr = 1,
                          prop.male = 0.5, arrival.rate = 0.0010, ...) {
@@ -222,7 +223,7 @@ hetage_param <- function(inf.prob.act = 0.0025, age.gap = 5,
     agyw.susc.15_19 = agyw.susc.15_19, agyw.susc.20_24 = agyw.susc.20_24,
     rel.inf.acute = 5, rel.inf.aids = 2,
     rel.inf.art.unsupp = 0.30, rel.inf.art.supp = 0.01, prep.efficacy = 0.95,
-    acts.main = 3, acts.casual = 1,
+    acts.main = acts.main, acts.casual = acts.casual,
     acute.to.chronic.rate = 1/12, chronic.to.aids.rate = 1/520, aids.depart.rate = 1/104,
     art.prog.mult = 0.5, art.aids.surv.mult = 0.1,
     test.rate = test.rate, aids.dx.rate = 0.05, linkage.rate = 0.5,
