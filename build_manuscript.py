@@ -99,11 +99,11 @@ para("**Results.** The calibrated model reproduced the South African epidemic "
      "trajectory (trajectory RMSE 0.031) and, without cascade-specific tuning, the "
      "observed AGYW care-cascade shortfall (73% of HIV-positive AGYW diagnosed and 62% "
      "virally suppressed, vs 89% and 78% among adults). In the no-chatbot "
-     "counterfactual the model projected ~871,000 AGYW HIV infections nationally over "
-     "2025–2035. At 50% reach the chatbot averted an estimated **8.8% of infections "
-     "(76,310; 95% CI 33,348–119,272; p = 0.002)** under the central assumption and "
-     "**12.9% (112,584; 59,312–165,856; p = 0.001)** under the optimistic assumption; "
-     "effects were statistically supported in six of nine scenarios. Impact was driven "
+     "counterfactual the model projected ~718,000 AGYW HIV infections nationally over "
+     "2025–2035. At 50% reach the chatbot averted an estimated **5.8% of infections "
+     "(41,418; 95% CI 22,923–59,913; p < 0.001)** under the central assumption and "
+     "**10.1% (72,360; 56,067–88,654; p < 0.001)** under the optimistic assumption; "
+     "effects were statistically supported in five of nine scenarios. Impact was driven "
      "by increased AGYW PrEP coverage (from ~3% to 8–14%).")
 para("**Conclusions.** Under realistic assumptions about South African HIV treatment "
      "and PrEP coverage — including poor oral-PrEP continuation — an AI health companion "
@@ -320,41 +320,44 @@ add_table(
     widths=[1.7,1.0,0.9,1.1,1.9])
 
 H2("Projected impact of the Aimee chatbot, 2025–2035")
-para("In the no-chatbot counterfactual, the model projected approximately 871,000 new "
+para("In the no-chatbot counterfactual, the model projected approximately 718,000 new "
      "HIV infections among AGYW nationally over 2025–2035 (median; interquartile range "
-     "851,000–911,000). This baseline incorporates realistic oral-PrEP discontinuation "
+     "691,000–741,000). This baseline incorporates realistic oral-PrEP discontinuation "
      "(≈6-month median retention), so baseline PrEP coverage remained low (~3%, "
      "consistent with South African estimates) with rapid turnover. Introducing the "
-     "chatbot in 2025 reduced this burden, with impact increasing with both reach and "
-     "the assumed causal fraction of the observed engagement effect (Table 2).")
-para("At 50% reach, the chatbot averted an estimated **8.8% of AGYW infections "
-     "(76,310; 95% CI 33,348–119,272; p = 0.002)** under the central assumption and "
-     "**12.9% (112,584; 59,312–165,856; p = 0.001)** under the optimistic assumption. "
-     "At 30% reach the central estimate was 7.4% (64,471; 15,751–113,190; p = 0.014). "
-     "Effects were statistically supported (95% CI excluding zero) in six of the nine "
-     "intervention scenarios, including all central and optimistic scenarios at 30% and "
-     "50% reach; the 50%-reach conservative scenario and the small-signal 10%-reach "
-     "scenarios were not significant. Efficiency declined with increasing reach (more "
-     "AGYW reached per infection averted), reflecting diminishing marginal returns as "
-     "coverage expanded.")
+     "chatbot in 2025 reduced this burden, with impact increasing monotonically with both "
+     "reach and the assumed causal fraction of the observed engagement effect (Table 2).")
+para("At 50% reach, the chatbot averted an estimated **5.8% of AGYW infections "
+     "(41,418; 95% CI 22,923–59,913; p < 0.001)** under the central assumption and "
+     "**10.1% (72,360; 56,067–88,654; p < 0.001)** under the optimistic assumption; even "
+     "the conservative assumption averted a significant 3.4% (24,326; 6,582–42,070; "
+     "p = 0.009). At 30% reach the central estimate was 3.5% (25,473; 7,426–43,521; "
+     "p = 0.008) and the optimistic 5.8% (41,528; 26,472–56,584; p < 0.001). Effects were "
+     "statistically supported (95% CI excluding zero) in five of the nine intervention "
+     "scenarios — all central and optimistic scenarios at 30% and 50% reach, plus the "
+     "50%-reach conservative scenario; the 30%-reach conservative and the small-signal "
+     "10%-reach scenarios (averting ≤1% of infections) were not significant. Efficiency "
+     "improved with increasing reach under the optimistic assumption but was highly "
+     "uncertain for the marginal conservative and low-reach scenarios.")
 add_table(
     ["Reach", "Causal fraction", "Infections averted (mean)", "95% CI", "p", "% averted"],
-    [["10%","Conservative","21,489","−26,671 – 69,649","0.347","2.5%"],
-     ["10%","Central","25,883","−26,611 – 78,378","0.301","3.0%"],
-     ["10%","Optimistic","43,115","4,109 – 82,121","0.033","4.9%"],
-     ["30%","Conservative","29,372","205 – 58,538","0.049","3.4%"],
-     ["30%","Central","64,471","15,751 – 113,190","0.014","7.4%"],
-     ["30%","Optimistic","48,786","5,274 – 92,298","0.031","5.6%"],
-     ["50%","Conservative","25,943","−14,162 – 66,049","0.182","3.0%"],
-     ["50%","Central","76,310","33,348 – 119,272","0.002","8.8%"],
-     ["50%","Optimistic","112,584","59,312 – 165,856","0.001","12.9%"]],
-    bold_row_idx={2,3,4,5,7,8},
+    [["10%","Conservative","−3,447","−19,864 – 12,970","0.668","−0.5%"],
+     ["10%","Central","988","−16,911 – 18,887","0.910","0.1%"],
+     ["10%","Optimistic","8,075","−15,670 – 31,819","0.489","1.1%"],
+     ["30%","Conservative","13,290","−4,652 – 31,233","0.139","1.9%"],
+     ["30%","Central","25,473","7,426 – 43,521","0.008","3.5%"],
+     ["30%","Optimistic","41,528","26,472 – 56,584","<0.001","5.8%"],
+     ["50%","Conservative","24,326","6,582 – 42,070","0.009","3.4%"],
+     ["50%","Central","41,418","22,923 – 59,913","<0.001","5.8%"],
+     ["50%","Optimistic","72,360","56,067 – 88,654","<0.001","10.1%"]],
+    bold_row_idx={4,5,6,7,8},
     caption="Table 2. AGYW HIV infections averted by the Aimee chatbot, 2025–2035.",
     widths=[0.6,1.2,1.5,1.5,0.6,0.8])
-para("Baseline (no chatbot): ~871,345 national AGYW HIV infections 2025–2035 (median; "
-     "mean 883,253). Bold rows: 95% CI excludes zero. Estimates are mean infections "
-     "averted over 12 stochastic replicates (population 10,000), paired with the baseline "
-     "by common random numbers; 95% CI and p-value from a paired t test on the "
+para("Baseline (no chatbot): ~718,267 national AGYW HIV infections 2025–2035 (median; "
+     "mean 712,851; IQR 690,753–741,146). Bold rows: 95% CI excludes zero. Estimates are "
+     "mean infections averted over 24 stochastic replicates (population 20,000), paired "
+     "with the baseline by common random numbers; 95% CI and p-value from a paired t test "
+     "on the "
      "per-replicate averted differences.", italic=True, size=9)
 
 H2("Mechanism")
@@ -376,9 +379,9 @@ H1("Discussion")
 para("Using a calibrated dynamic network model of heterosexual HIV transmission in "
      "South Africa, we estimated that an AI health companion that durably engages AGYW "
      "with HIV testing and PrEP could avert a meaningful share of new infections — on "
-     "the order of 9–13% at 50% reach under central-to-optimistic assumptions, "
-     "corresponding to roughly 76,000–113,000 infections nationally over a decade. The "
-     "effect was statistically supported in six of nine scenarios and increased "
+     "the order of 6–10% at 50% reach under central-to-optimistic assumptions, "
+     "corresponding to roughly 41,000–72,000 infections nationally over a decade. The "
+     "effect was statistically supported in five of nine scenarios and increased "
      "monotonically with reach and with the assumed causal fraction of the observed "
      "engagement effect. To our knowledge this is the first transmission-dynamic "
      "estimate of the population HIV impact of a conversational AI health tool.")
@@ -494,7 +497,7 @@ add_table(["Parameter","Value","Source / note"],
   ["HIV seed year / prevalence","1990 / 0.8%","Calibration setup"],
   ["Demographic burn-in","1965–1990 (HIV-free)","Calibration setup"],
   ["National AGYW population (scaling)","5,071,746","Thembisa 2022"],
-  ["Replicates / population size","12 / 10,000","Simulation design"]],
+  ["Replicates / population size","24 / 20,000","Simulation design"]],
  widths=[2.6,1.5,2.5])
 
 H2("Table S2. Calibration targets (Thembisa v5.0, 2022)")

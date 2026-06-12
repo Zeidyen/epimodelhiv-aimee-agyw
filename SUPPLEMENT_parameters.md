@@ -75,7 +75,7 @@ with South African program estimates) with rapid turnover.
 | Testing rate ratio (= 1 + (2.11−1)×fraction) | 1.28 / 1.55 / 2.11 |
 | PrEP rate ratio (= 1 + (2.22−1)×fraction) | 1.31 / 1.61 / 2.22 |
 | National AGYW population (scaling) | 5,071,746 (Thembisa 2022) |
-| Replicates per scenario / population size | 12 / 10,000 |
+| Replicates per scenario / population size | 24 / 20,000 |
 
 ## Calibration targets (Thembisa v5.0, 2022)
 | Target | Value |
