@@ -139,6 +139,7 @@ ggsave("results/intervention_views.png",arrangeGrob(ph,pd,pe,ncol=3),width=15,he
 # fan + mechanism
 sel<-c("baseline","r30_central","r50_central","r50_optimistic")
 lab<-c(baseline="Baseline",r30_central="Reach 30%, central",r50_central="Reach 50%, central",r50_optimistic="Reach 50%, optimistic")
+INC<-INC[INC$year<=END_YEAR-1,]; PREP<-PREP[PREP$year<=END_YEAR-1,]  # drop 2035 partial-year artifact
 INCs<-INC[INC$scenario %in% sel,]; INCs$scenario<-factor(lab[INCs$scenario],levels=lab[sel])
 PREPs<-PREP[PREP$scenario %in% sel,]; PREPs$scenario<-factor(lab[PREPs$scenario],levels=lab[sel])
 cols<-c("#2c3e50","#f1c40f","#e67e22","#27ae60")
