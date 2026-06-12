@@ -128,14 +128,27 @@ p_bar<-ggplot(res,aes(factor(reach*100),averted_med,fill=causal))+geom_col(posit
        subtitle=sprintf("SA-realistic baseline; %.0f baseline infections. Paired t-CI, N=%d. Bars=mean, whiskers=95%% CI.",base_med,N),
        x="Chatbot reach among AGYW (%)",y="National AGYW infections averted")+theme_minimal(base_size=12)
 ggsave("results/intervention.png",p_bar,width=9,height=5,dpi=140)
-# heatmap + dose-response + efficiency
+# heatmap + dose-response (bars+CI) + efficiency (bars+CI)
+# derive % and efficiency CIs from the t-CI on absolute averted
+res$pct_lo<-100*res$averted_lo/base_med; res$pct_hi<-100*res$averted_hi/base_med
+res$nnr_lo<-ifelse(res$averted_hi>0,res$reached/res$averted_hi,NA)  # lower NNR = better efficiency
+res$nnr_hi<-ifelse(res$averted_lo>0,res$reached/res$averted_lo,NA)  # unbounded when averted CI crosses 0
+CAP<-quantile(res$nnr[is.finite(res$nnr)],.95,na.rm=TRUE)*1.3; res$nnr_hi_c<-pmin(res$nnr_hi,CAP)
+res$clip<-(!is.na(res$nnr_hi)&res$nnr_hi>CAP)|(is.na(res$nnr_hi)&res$averted_med>0)
+gpos<-position_dodge(.8)
 ph<-ggplot(res,aes(causal,factor(reach*100),fill=pct_med))+geom_tile(colour="white")+geom_text(aes(label=sprintf("%.1f%%",pct_med)),size=4)+
-  scale_fill_gradient(low="#f7fcf5",high="#00441b",name="% averted")+labs(title="% infections averted",x="Causal fraction",y="Reach (%)")+theme_minimal(base_size=12)
-pd<-ggplot(res,aes(reach*100,pct_med,colour=causal,group=causal))+geom_line(linewidth=1)+geom_point(size=2.5)+
-  scale_colour_brewer(palette="Set2",name="Causal")+labs(title="Dose-response",x="Reach (%)",y="% averted")+theme_minimal(base_size=12)
-pe<-ggplot(res,aes(reach*100,nnr,colour=causal,group=causal))+geom_line(linewidth=1)+geom_point(size=2.5)+
-  scale_colour_brewer(palette="Set2",name="Causal")+labs(title="Efficiency",x="Reach (%)",y="AGYW reached / infection averted")+theme_minimal(base_size=12)
-ggsave("results/intervention_views.png",arrangeGrob(ph,pd,pe,ncol=3),width=15,height=4.5,dpi=140)
+  scale_fill_gradient(low="#f7fcf5",high="#00441b",name="% averted")+labs(title="(A) % infections averted",x="Causal fraction",y="Reach (%)")+theme_minimal(base_size=12)
+pd<-ggplot(res,aes(factor(reach*100),pct_med,fill=causal))+geom_col(position=gpos,width=.7)+
+  geom_errorbar(aes(ymin=pct_lo,ymax=pct_hi),position=gpos,width=.2)+geom_hline(yintercept=0,colour="grey50")+
+  scale_fill_brewer(palette="Greens",name="Causal fraction")+labs(title="(B) Dose-response: % AGYW infections averted",x="Reach (%)",y="% infections averted")+theme_minimal(base_size=12)
+pe<-ggplot(res,aes(factor(reach*100),nnr,fill=causal))+geom_col(position=gpos,width=.7)+
+  geom_errorbar(aes(ymin=nnr_lo,ymax=nnr_hi_c),position=gpos,width=.2)+
+  geom_point(data=subset(res,clip),aes(y=CAP),position=gpos,shape=24,size=1.8,fill="grey30",colour="grey30",show.legend=FALSE)+
+  scale_fill_brewer(palette="Greens",name="Causal fraction")+coord_cartesian(ylim=c(0,CAP))+
+  labs(title="(C) Efficiency (lower = better)",x="Reach (%)",y="AGYW reached / infection averted",
+       caption="▲ = upper CI extends off-scale (effect near zero → efficiency highly uncertain)")+
+  theme_minimal(base_size=12)+theme(plot.caption=element_text(size=8,colour="grey40"))
+ggsave("results/intervention_views.png",arrangeGrob(ph,pd,pe,ncol=3),width=15,height=4.8,dpi=140)
 # fan + mechanism
 sel<-c("baseline","r30_central","r50_central","r50_optimistic")
 lab<-c(baseline="Baseline",r30_central="Reach 30%, central",r50_central="Reach 50%, central",r50_optimistic="Reach 50%, optimistic")
