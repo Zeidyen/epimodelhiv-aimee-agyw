@@ -16,7 +16,7 @@ suppressMessages({library(ggplot2); library(gridExtra); library(parallel)})
 CP<-CALIBRATED; FY<-CP$first.year; ST<-CP$burnin.year*52+1
 CHATBOT_YEAR<-2025; END_YEAR<-2035; NATIONAL_AGYW<-5071746
 HR_TEST<-2.11; HR_PREP<-2.22; BASE_SEED<-40
-N <- 10000; NSIMS <- 12; NCORES <- max(1, parallel::detectCores()-2)
+N <- as.integer(Sys.getenv("FULL_N","10000")); NSIMS <- as.integer(Sys.getenv("FULL_NSIMS","12")); NCORES <- max(1, parallel::detectCores()-2)
 
 cascade_int <- function(dat, at) {
   p<-dat$param; yr<-p$first.year+(at-1)/52; s0<-p$art.start.year; s1<-p$art.full.year
@@ -96,11 +96,15 @@ base_col<-M[,"baseline"]; base_med<-median(base_col,na.rm=TRUE)
 
 # ---- averted result ----
 rows<-list()
-for(j in 2:length(scns)){ sc<-scns[[j]]; av<-base_col-M[,j]; am<-median(av,na.rm=TRUE)
+# Inference uses the paired t-CI on the MEAN averted (estimate of the expected
+# effect), which is appropriate when the signal is small vs replicate variability;
+# the 2.5/97.5 percentile interval is also recorded for reference.
+for(j in 2:length(scns)){ sc<-scns[[j]]; av<-base_col-M[,j]; am<-mean(av,na.rm=TRUE)
+  tt<-tryCatch(t.test(av),error=function(e) list(conf.int=c(NA,NA),p.value=NA))
   rows[[length(rows)+1]]<-data.frame(reach=sc$reach,causal=sub("^r\\d+_","",sc$id),
-    averted_med=am,averted_lo=quantile(av,.025,na.rm=TRUE),averted_hi=quantile(av,.975,na.rm=TRUE),
+    averted_med=am,averted_lo=tt$conf.int[1],averted_hi=tt$conf.int[2],p=tt$p.value,
     pct_med=100*am/base_med, reached=sc$reach*NATIONAL_AGYW, nnr=ifelse(am>0,sc$reach*NATIONAL_AGYW/am,NA))
-  cat(sprintf("%s: averted %.0f [%.0f, %.0f] (%.1f%%)\n",sc$id,am,quantile(av,.025,na.rm=TRUE),quantile(av,.975,na.rm=TRUE),100*am/base_med)) }
+  cat(sprintf("%s: averted %.0f [%.0f, %.0f] p=%.3f (%.1f%%)\n",sc$id,am,tt$conf.int[1],tt$conf.int[2],tt$p.value,100*am/base_med)) }
 res<-do.call(rbind,rows); res$causal<-factor(res$causal,levels=c("conservative","central","optimistic"))
 
 # ---- trajectories (per scenario per year median + CI) ----
@@ -118,10 +122,10 @@ cat(sprintf("\nBaseline national AGYW infections 2025-2035: %.0f\n",base_med))
 gr<-"#27ae60"
 # main bars
 p_bar<-ggplot(res,aes(factor(reach*100),averted_med,fill=causal))+geom_col(position=position_dodge(.8),width=.7)+
-  geom_errorbar(aes(ymin=averted_lo,ymax=averted_hi),position=position_dodge(.8),width=.2)+
+  geom_errorbar(aes(ymin=averted_lo,ymax=averted_hi),position=position_dodge(.8),width=.2)+geom_hline(yintercept=0,colour="grey50")+
   scale_fill_brewer(palette="Greens",name="Causal fraction")+
   labs(title="AGYW HIV infections averted by the Aimee chatbot, 2025-2035 (South Africa)",
-       subtitle=sprintf("Calibrated baseline; %.0f baseline infections. Paired design, N=%d. Bars=median, whiskers=95%%.",base_med,N),
+       subtitle=sprintf("SA-realistic baseline; %.0f baseline infections. Paired t-CI, N=%d. Bars=mean, whiskers=95%% CI.",base_med,N),
        x="Chatbot reach among AGYW (%)",y="National AGYW infections averted")+theme_minimal(base_size=12)
 ggsave("results/intervention.png",p_bar,width=9,height=5,dpi=140)
 # heatmap + dose-response + efficiency

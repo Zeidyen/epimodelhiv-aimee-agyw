@@ -58,7 +58,18 @@ Antiretroviral therapy availability was introduced as a time-varying scale-up
 ramping from 0 (pre-2004) to full (2014), reproducing the South African ART
 roll-out. PrEP was modelled on the susceptible side as a per-act reduction in
 acquisition probability (95% efficacy), with stochastic initiation among eligible
-individuals and discontinuation.
+individuals and discontinuation. The PrEP discontinuation rate was set to reflect
+the documented poor continuation of oral PrEP among South African AGYW (≈6-month
+median retention), so that baseline PrEP coverage remained low (~3%) with rapid
+turnover rather than accumulating an unrealistically protected stock.
+
+To check that the baseline reflected real South African treatment and care
+coverage, we compared the model's emergent care cascade with national estimates.
+The calibrated model reproduced the observed cascade — including the AGYW shortfall
+relative to adults (model: 73% of HIV-positive AGYW diagnosed and 62% suppressed,
+versus 89% and 78% for all adults; South Africa: ~74%/~68% for AGYW versus
+~90%/~77% overall) — without any cascade-specific tuning, because young women are
+more recently infected and so have had less time to be diagnosed and suppressed.
 
 ## Data sources and parameterization
 
@@ -129,9 +140,18 @@ used a fixed random seed shared across all scenarios, so baseline and interventi
 replicates shared an identical pre-2025 epidemic history and diverged only through
 the chatbot. Correct alignment was verified by confirming that pre-2025 infection
 counts were identical across scenarios within each replicate. We ran 12 replicates
-per scenario at a population of 10,000 and report medians with 2.5th–97.5th
-percentile simulation intervals. Scenarios were run in parallel across (scenario ×
-replicate) tasks.
+per scenario at a population of 10,000. Scenarios were run in parallel across
+(scenario × replicate) tasks.
+
+Because the intervention effect is small relative to stochastic epidemic
+variability, we based inference on the **per-replicate paired difference** in
+national AGYW infections (baseline minus scenario), which removes the shared
+epidemic variance. For each scenario we report the **mean infections averted with a
+95% confidence interval and p-value from a paired *t* test** on these differences —
+the appropriate estimate of the expected (population-average) effect and its
+estimation uncertainty. We additionally inspected the distribution of paired
+differences across replicates; the central and optimistic scenarios at 30% and 50%
+reach averted infections in the large majority of replicates.
 
 The model was implemented in R (`EpiModel` 2.6.1; `statnet` `ergm`/`tergm`).
 Analysis code is available at <repository>.

@@ -257,7 +257,7 @@ hetage_param <- function(inf.prob.act = 0.0025, age.gap = 5,
     test.rate = test.rate, aids.dx.rate = 0.05, linkage.rate = 0.5,
     art.reinit.rate = 0.1, suppression.rate = 0.3, art.disc.rate = 0.01,
     prep.init.cov = prep.init.cov, prep.start.rate = prep.start.rate,
-    prep.stop.rate = 0.01, prep.indic.deg = 2,
+    prep.stop.rate = 0.027, prep.indic.deg = 2,  # ~6-mo median oral-PrEP retention (SA AGYW)
     departure.rate = 0.0005, arrival.rate = arrival.rate, prop.male = prop.male,
     age.gap = age.gap,
     chatbot.reach = chatbot.reach, chatbot.test.rr = chatbot.test.rr,

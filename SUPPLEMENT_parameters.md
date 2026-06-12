@@ -49,8 +49,13 @@ trajectory, "data"/"literature" indicates a fixed input.
 |---|---|
 | Initial PrEP coverage (eligible) | 0.02 |
 | PrEP initiation rate | 0.005 |
-| PrEP discontinuation rate | 0.01 |
+| PrEP discontinuation rate | 0.027 (≈6-month median retention; SA oral-PrEP literature) |
 | PrEP indication degree threshold | 2 |
+
+The PrEP discontinuation rate is set to reflect the documented poor continuation of
+oral PrEP among South African AGYW (median retention on the order of months rather
+than years). At this rate baseline PrEP coverage among AGYW remains ~3% (consistent
+with South African program estimates) with rapid turnover.
 
 ## Demography and epidemic timing
 | Parameter | Value |
@@ -80,3 +85,18 @@ trajectory, "data"/"literature" indicates a fixed input.
 | HIV incidence, women 15–24 | 0.96 / 100 PY |
 | Older-men prevalence, 25–29 / 30–34 / 35–39 / 40–44 | 7.1 / 12.0 / 18.1 / 22.4% |
 | Best-fit trajectory RMSE | 0.031 |
+
+## Care-cascade validation (model vs South Africa, 2022)
+
+The cascade was not tuned to these targets; the values below emerged from the
+calibrated transmission/age structure and are reported as an out-of-sample check.
+
+| Group | Diagnosed | On ART | Suppressed | SA reference |
+|---|---|---|---|---|
+| AGYW (women 15–24) | 73% | 66% | 62% | ~74% diagnosed, ~68% suppressed |
+| Adults (15–49) | 89% | 81% | 78% | ~90% diagnosed, ~77% suppressed |
+| Men 25–34 | 84% | 78% | 76% | ~66% suppressed |
+
+The model reproduces the empirical AGYW cascade shortfall relative to adults
+(young women more recently infected, hence less diagnosed/suppressed) without
+cascade-specific parameters.
