@@ -60,6 +60,17 @@ def add_table(headers, rows, bold_row_idx=None, caption=None, widths=None):
     doc.add_paragraph()
     return t
 
+import os
+def figure(path, num, caption, width=6.5):
+    if not os.path.exists(path):
+        doc.add_paragraph(f"[Figure {num} image not found: {path}]"); return
+    doc.add_picture(path, width=Inches(width))
+    doc.paragraphs[-1].alignment = WD_ALIGN_PARAGRAPH.CENTER
+    c = doc.add_paragraph(); c.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    r = c.add_run(f"Figure {num}. "); r.bold = True; r.font.size = Pt(9)
+    r2 = c.add_run(caption); r2.font.size = Pt(9)
+    doc.add_paragraph()
+
 # ============================ TITLE ============================
 title = doc.add_paragraph()
 title.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -315,7 +326,7 @@ para("The calibrated model reproduced the South African HIV epidemic trajectory 
      "0.031 against the joint prevalence and incidence targets. The model reproduced the "
      "age-disparate structure underlying AGYW risk: HIV prevalence in the older male "
      "partner pool (men 25–44) rose steeply with age (~7% to ~22%), against which AGYW "
-     "acquired infection.")
+     "acquired infection (Figure 1).")
 
 H2("Baseline care cascade reproduces the South African AGYW gap")
 para("Before projecting the intervention, we verified that the calibrated model "
@@ -343,7 +354,8 @@ para("In the no-chatbot counterfactual, the model projected approximately 733,00
      "(≈6-month median retention), so baseline PrEP coverage remained low (~3%, "
      "consistent with South African estimates) with rapid turnover. Introducing the "
      "chatbot in 2025 reduced this burden, with impact increasing monotonically with both "
-     "reach and the assumed causal fraction of the observed engagement effect (Table 2).")
+     "reach and the assumed causal fraction of the observed engagement effect "
+     "(Figure 2; Table 2).")
 para("At 50% reach, the chatbot averted an estimated **6.2% of AGYW infections "
      "(45,333; 95% CI 36,884–53,782; p < 0.001)** under the central assumption and "
      "**10.3% (75,191; 65,724–84,659; p < 0.001)** under the optimistic assumption; even "
@@ -354,7 +366,7 @@ para("At 50% reach, the chatbot averted an estimated **6.2% of AGYW infections "
      "scenarios — every scenario except the 10%-reach central scenario (0.9%; p = 0.11). "
      "With 96 replicates these intervals were tight (±9,500 at 50% reach, optimistic). "
      "Efficiency improved with increasing reach under the optimistic assumption, "
-     "reflecting the dose–response of the intervention.")
+     "reflecting the dose–response of the intervention (Figure 3).")
 add_table(
     ["Reach", "Causal fraction", "Infections averted (mean)", "95% CI", "p", "% averted"],
     [["10%","Conservative","8,945","602 – 17,287","0.036","1.2%"],
@@ -387,11 +399,11 @@ para("The projected impact was driven by increased PrEP uptake among reached AGY
      "continually erodes coverage and the chatbot must keep re-initiating to sustain it. "
      "Corresponding increases in HIV testing and diagnosis accompanied the PrEP gains, "
      "and the incidence trajectories diverged from baseline after 2025, with the largest "
-     "reductions under the highest reach and effect-size assumptions.")
+     "reductions under the highest reach and effect-size assumptions (Figure 4).")
 
 H2("PrEP delivery strategy: demand generation versus persistence support")
 para("A secondary analysis decomposed the 50%-reach effect into demand generation, "
-     "persistence support, and their combination (Table 3). Demand generation alone — "
+     "persistence support, and their combination (Figure 5; Table 3). Demand generation alone — "
      "the primary-analysis mechanism — averted 5.8% of AGYW infections (43,192; 95% CI "
      "25,852–60,531) and raised PrEP coverage from ~3% to ~11%, but coverage plateaued "
      "as initiated women continuously discontinued. Persistence support alone, which "
@@ -541,6 +553,41 @@ for i, r in enumerate(refs, 1):
     p = doc.add_paragraph(); p.paragraph_format.left_indent = Inches(0.3)
     p.paragraph_format.first_line_indent = Inches(-0.3)
     p.add_run(f"{i}. {r}").font.size = Pt(10)
+
+# ============================ FIGURES ============================
+doc.add_page_break()
+H1("Figures")
+RES = os.path.join(os.path.dirname(os.path.abspath(__file__)), "results")
+figure(os.path.join(RES,"calib_ci.png"), 1,
+  "Model calibration to the South African HIV epidemic, 1990–2022. Simulated HIV "
+  "prevalence among women 15–24 and adults 15–49, and HIV incidence among women 15–24 "
+  "(median and 95% simulation interval across replicates), against Thembisa v5.0 "
+  "targets. The calibrated model (per-act transmission probability 0.0035) reproduced "
+  "the rise, peak, and ART-era decline of the epidemic (trajectory RMSE 0.031).")
+figure(os.path.join(RES,"intervention.png"), 2,
+  "AGYW HIV infections averted by the Aimee chatbot, 2025–2035, by reach and causal "
+  "fraction. Bars are mean infections averted over 96 paired (common-random-number) "
+  "replicates; whiskers are 95% confidence intervals from a paired t test. The "
+  "SA-realistic baseline projected ~733,000 AGYW infections over the decade.")
+figure(os.path.join(RES,"intervention_views.png"), 3,
+  "Dose–response and efficiency. (A) Percentage of AGYW infections averted across the "
+  "reach × causal-fraction grid. (B) Dose–response: percentage averted rises with reach "
+  "(bars, 95% CI). (C) Efficiency (AGYW reached per infection averted; lower is more "
+  "efficient); triangular markers denote scenarios whose upper CI extends off-scale "
+  "because the effect is near zero and efficiency is undefined.")
+figure(os.path.join(RES,"trajectories_combined.png"), 4,
+  "Mechanism of impact. (A) AGYW HIV incidence trajectories — baseline versus chatbot "
+  "scenarios — diverging after the 2025 introduction. (B) AGYW PrEP coverage, which "
+  "rises from ~3% to roughly 8–14% depending on reach and causal fraction. Lines are "
+  "medians; shaded bands are 95% simulation intervals.")
+figure(os.path.join(RES,"persistence_combined.png"), 5,
+  "PrEP delivery strategy — demand generation versus persistence support (50% reach, "
+  "central initiation). (A) AGYW infections averted by strategy: demand generation, "
+  "persistence support (20/40/60% reduction in discontinuation), and both combined "
+  "(mean, 95% t-CI). (B) AGYW PrEP coverage by strategy: demand generation raises "
+  "coverage to ~11% but it plateaus; persistence support barely changes coverage yet "
+  "averts comparable infections by retaining higher-risk women already on PrEP; the "
+  "combined strategy is highest (~15.5%).")
 
 # ============================ SUPPLEMENT ============================
 doc.add_page_break()
