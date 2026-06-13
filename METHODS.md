@@ -139,7 +139,7 @@ used a **paired design with common random numbers**: each simulation replicate
 used a fixed random seed shared across all scenarios, so baseline and intervention
 replicates shared an identical pre-2025 epidemic history and diverged only through
 the chatbot. Correct alignment was verified by confirming that pre-2025 infection
-counts were identical across scenarios within each replicate. We ran 24 replicates
+counts were identical across scenarios within each replicate. We ran 96 replicates
 per scenario at a population of 20,000. Scenarios were run in parallel across
 (scenario × replicate) tasks.
 
