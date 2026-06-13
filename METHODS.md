@@ -125,6 +125,24 @@ of **reach** (10%, 30%, 50% of AGYW) × **causal fraction** (25% [conservative],
 50% [central], 100% [optimistic]), giving rate ratios of 1.28–2.11 for testing and
 1.31–2.22 for PrEP, plus a no-chatbot counterfactual baseline.
 
+### Implementation strategies: demand generation versus persistence support
+
+To inform how a chatbot programme should be designed, a secondary analysis
+decomposed the PrEP effect into the implementation levers the chatbot could act on,
+at a fixed 50% reach and central initiation effect (testing held at baseline to
+isolate the PrEP pathway). We distinguished three strategies: (i) **demand
+generation** — the chatbot expands PrEP eligibility among reached AGYW and raises
+their initiation rate (the mechanism used in the primary analysis); (ii)
+**persistence support** — the chatbot recruits no new users but reduces
+discontinuation among reached AGYW already on PrEP, representing digital
+adherence/retention support; and (iii) **both** combined. Because the cohort
+provides a hazard ratio for PrEP *initiation* but not for *continuation*, the
+persistence effect was not estimated from data but explored as a scenario range — a
+20%, 40%, or 60% reduction in the weekly discontinuation rate, corresponding to a
+median time on PrEP increasing from ~6 months to ~7.4, ~9.8, and ~14.8 months
+respectively, within the range reported for digital adherence-support interventions
+(a limitation we return to in the Discussion).
+
 ## Analysis
 
 For each scenario we projected the simulation to 2035 and computed the cumulative

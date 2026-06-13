@@ -259,6 +259,23 @@ para("The Aimee chatbot was represented not mechanistically but as a perturbatio
      "reach (10%, 30%, 50% of AGYW) × causal fraction (25% [conservative], 50% "
      "[central], 100% [optimistic]), plus a no-chatbot counterfactual baseline.")
 
+H2("Implementation strategies: demand generation versus persistence support")
+para("To inform how a chatbot programme should be designed, a secondary analysis "
+     "decomposed the PrEP effect into the implementation levers the chatbot could act "
+     "on, at a fixed 50% reach and central initiation effect (testing held at baseline "
+     "to isolate the PrEP pathway). We distinguished three strategies: (i) demand "
+     "generation — the chatbot expands PrEP eligibility among reached AGYW and raises "
+     "their initiation rate (the mechanism used in the primary analysis); (ii) "
+     "persistence support — the chatbot recruits no new users but reduces "
+     "discontinuation among reached AGYW already on PrEP, representing digital "
+     "adherence/retention support; and (iii) both combined. Because the cohort provides "
+     "a hazard ratio for PrEP initiation but not for continuation, the persistence "
+     "effect was not estimated from data but explored as a scenario range — a 20%, 40%, "
+     "or 60% reduction in the weekly discontinuation rate, corresponding to a median "
+     "time on PrEP increasing from ~6 months to ~7.4, ~9.8, and ~14.8 months "
+     "respectively, within the range reported for digital adherence-support "
+     "interventions (a limitation we return to in the Discussion).")
+
 H2("Analysis")
 para("For each scenario we projected the simulation to 2035 and computed the cumulative "
      "number of AGYW HIV infections over 2025–2035, scaled to the national AGYW "
@@ -372,6 +389,45 @@ para("The projected impact was driven by increased PrEP uptake among reached AGY
      "and the incidence trajectories diverged from baseline after 2025, with the largest "
      "reductions under the highest reach and effect-size assumptions.")
 
+H2("PrEP delivery strategy: demand generation versus persistence support")
+para("A secondary analysis decomposed the 50%-reach effect into demand generation, "
+     "persistence support, and their combination (Table 3). Demand generation alone — "
+     "the primary-analysis mechanism — averted 5.8% of AGYW infections (43,192; 95% CI "
+     "25,852–60,531) and raised PrEP coverage from ~3% to ~11%, but coverage plateaued "
+     "as initiated women continuously discontinued. Persistence support alone, which "
+     "recruited no new users, averted 1.0% (not significant), 3.7% (p = 0.009), and 5.1% "
+     "(p < 0.001) of infections at a 20%, 40%, and 60% reduction in discontinuation — "
+     "approaching the impact of demand generation at the strongest assumption, despite "
+     "barely changing overall PrEP coverage (≤3.2%). This efficiency arises because "
+     "persistence support concentrates protection on the clinically-eligible, "
+     "higher-risk women already on PrEP, extending their protected time rather than "
+     "diluting coverage across lower-risk new initiators.")
+para("Combining the two strategies was super-additive: at a 40% reduction in "
+     "discontinuation, demand-plus-persistence averted 11.6% of infections (86,480; "
+     "95% CI 73,222–99,738) — exceeding the 9.4% expected if the levers were additive "
+     "(synergy +2.1 percentage points) — and reached 14.5% at a 60% reduction, with PrEP "
+     "coverage rising to ~15.5%. Recruiting more women and keeping them on PrEP "
+     "compounded, because each additional initiator contributed more protected "
+     "person-time.")
+add_table(
+    ["Strategy", "Disc. reduction", "Infections averted (mean)", "95% CI", "p", "% averted"],
+    [["Demand only","—","43,192","25,852 – 60,531","<0.001","5.8%"],
+     ["Persistence only","20%","7,310","−9,864 – 24,483","0.388","1.0%"],
+     ["Persistence only","40%","27,465","7,623 – 47,306","0.009","3.7%"],
+     ["Persistence only","60%","38,010","22,275 – 53,746","<0.001","5.1%"],
+     ["Both","20%","77,035","63,437 – 90,633","<0.001","10.3%"],
+     ["Both","40%","86,480","73,222 – 99,738","<0.001","11.6%"],
+     ["Both","60%","108,253","90,444 – 126,063","<0.001","14.5%"]],
+    bold_row_idx={0,2,3,4,5,6},
+    caption="Table 3. PrEP delivery strategy — demand vs persistence (50% reach, central initiation).",
+    widths=[1.3,1.0,1.6,1.4,0.6,0.8])
+para("Baseline ~747,703 national AGYW infections. Demand only = expand eligibility + "
+     "boost initiation; Persistence only = reduce discontinuation among reached AGYW on "
+     "PrEP (no new initiation); Both = combined. Testing held at baseline. Bold rows: "
+     "95% CI excludes zero. 96 paired replicates, population 20,000. The persistence "
+     "effect is a literature-informed scenario range, not a cohort estimate.",
+     italic=True, size=9)
+
 # ============================ DISCUSSION ============================
 doc.add_page_break()
 H1("Discussion")
@@ -395,6 +451,25 @@ para("The projected benefit operated almost entirely through PrEP. Because the c
      "that sustain PrEP persistence, or that channel young women toward longer-acting "
      "formulations such as injectable cabotegravir or lenacapavir, would be expected to "
      "yield substantially larger and more durable impact than demand generation alone.")
+para("Our implementation-strategy analysis makes this concrete and carries a direct "
+     "programmatic message. The conventional framing of a digital health tool — as a "
+     "demand-generation channel that drives people to initiate PrEP — captured only part "
+     "of its potential value. Retention support alone, keeping already-eligible "
+     "higher-risk young women on PrEP, approached the impact of demand generation (5.1% "
+     "vs 5.8% of infections averted at the strongest assumption) while barely changing "
+     "measured coverage, because it concentrates protection on the women at greatest "
+     "risk rather than diluting it across new lower-risk initiators. Combining demand "
+     "with retention was super-additive, averting up to 14.5% of infections — more than "
+     "the sum of the two levers applied separately. Because oral-PrEP continuation among "
+     "South African AGYW is poor, a chatbot that sustains use — through reminders, "
+     "side-effect counselling, refill navigation, or steering toward long-acting "
+     "formulations — may convert the same engagement into more averted infections than "
+     "initiation messaging alone, and programmes that pair demand generation with "
+     "retention support should expect more than the sum of their parts. We caution that "
+     "the persistence effect was not measured in the cohort, which yields an initiation "
+     "hazard ratio, and was explored as a literature-informed scenario range; "
+     "quantifying the chatbot's true effect on PrEP continuation is a priority for "
+     "future data collection and randomised evaluation.")
 para("A particular strength of the analysis is that the baseline was anchored to the "
      "real South African standard of care rather than an idealised one. The model "
      "reproduced the observed care cascade, including the well-documented AGYW shortfall "

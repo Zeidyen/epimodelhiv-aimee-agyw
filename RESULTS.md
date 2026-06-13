@@ -70,6 +70,28 @@ PrEP gains. The incidence trajectories diverged from baseline after 2025, with t
 largest reductions under the highest reach and effect-size assumptions (Figure 5,
 panel A).
 
+## PrEP delivery strategy: demand generation versus persistence support
+
+A secondary analysis decomposed the 50%-reach effect into demand generation,
+persistence support, and their combination (Figure 6; Table 2). **Demand generation
+alone** — the primary-analysis mechanism — averted 5.8% of AGYW infections (43,192;
+95% CI 25,852–60,531) and raised PrEP coverage from ~3% to ~11%, but coverage
+plateaued as initiated women continuously discontinued. **Persistence support
+alone**, which recruited no new users, averted 1.0% (not significant), 3.7%
+(p = 0.009), and 5.1% (p < 0.001) of infections at a 20%, 40%, and 60% reduction in
+discontinuation — approaching the impact of demand generation at the strongest
+assumption, despite barely changing overall PrEP coverage (≤3.2%). This efficiency
+arises because persistence support concentrates protection on the clinically-eligible,
+higher-risk women already on PrEP, extending their protected time rather than diluting
+coverage across lower-risk new initiators.
+
+Combining the two strategies was **super-additive**: at a 40% reduction in
+discontinuation, demand-plus-persistence averted 11.6% of infections (86,480; 95% CI
+73,222–99,738) — exceeding the 9.4% expected if the levers were additive (synergy
++2.1 percentage points) — and reached 14.5% at a 60% reduction, with PrEP coverage
+rising to ~15.5%. Recruiting more women and keeping them on PrEP compounded, because
+each additional initiator contributed more protected person-time.
+
 ---
 
 ## Table 1. AGYW HIV infections averted by the Aimee chatbot, 2025–2035
@@ -93,3 +115,24 @@ the baseline by common random numbers; the 95% CI and p-value are from a paired 
 test on the per-replicate averted differences. The baseline reflects realistic
 oral-PrEP discontinuation (≈6-month median retention) and a care cascade validated
 against the observed South African AGYW coverage gap (see text).
+
+---
+
+## Table 2. PrEP delivery strategy — demand vs persistence (50% reach, central initiation)
+
+| Strategy | Discontinuation reduction | Infections averted (mean) | 95% CI | p | % averted |
+|---|---|---|---|---|---|
+| Demand only | — | **43,192** | 25,852 – 60,531 | <0.001 | 5.8% |
+| Persistence only | 20% | 7,310 | −9,864 – 24,483 | 0.388 | 1.0% |
+| Persistence only | 40% | **27,465** | 7,623 – 47,306 | 0.009 | 3.7% |
+| Persistence only | 60% | **38,010** | 22,275 – 53,746 | <0.001 | 5.1% |
+| Both | 20% | **77,035** | 63,437 – 90,633 | <0.001 | 10.3% |
+| Both | 40% | **86,480** | 73,222 – 99,738 | <0.001 | 11.6% |
+| Both | 60% | **108,253** | 90,444 – 126,063 | <0.001 | 14.5% |
+
+Baseline: ~747,703 national AGYW infections. Demand only = expand eligibility + boost
+initiation; Persistence only = reduce discontinuation among reached AGYW on PrEP (no
+new initiation); Both = combined. Testing held at baseline to isolate the PrEP
+pathway. Bold rows: 95% CI excludes zero. 96 paired replicates, population 20,000.
+The persistence effect is a literature-informed scenario range, not a cohort estimate
+(see Methods/Discussion).
