@@ -60,11 +60,24 @@ with South African program estimates) with rapid turnover.
 ## Demography and epidemic timing
 | Parameter | Value |
 |---|---|
-| Background departure (mortality) | 0.0005 / week |
-| Arrival rate | 0.0010 / week |
+| Background departure (mortality), non-AIDS | 0.0005 / week (≈2.6% / year) |
+| AIDS departure (untreated) | 1/104 / week (~2-year survival) |
+| AIDS-survival multiplier on suppressive ART | 0.1 (~10× longer) |
+| Arrival rate (new age-15 entrants) | 0.0010 / week (≈5% / year) |
+| Sex ratio of arrivals (proportion male) | 0.50 |
 | Entry / exit ages | 15 / 50 years |
 | Demographic burn-in | 1965–1990 (25 y, HIV-free) |
 | HIV seed year / prevalence | 1990 / 0.8% |
+
+**Implementation.** The model steps weekly. Each week the number of new entrants is
+a Poisson draw with mean = (active population) × (arrival rate); entrants begin at
+age 15, susceptible, with sex assigned at the stated ratio. Background departure and
+AIDS departure are independent Bernoulli draws at the per-week rates above
+(AIDS-stage individuals use the elevated rate, reduced by the survival multiplier
+when virally suppressed). Individuals reaching age 50 leave the sexually-active
+population deterministically. Entry slightly exceeds background exit, so the
+population grows modestly. These rates were chosen to maintain a stable-to-growing
+age structure during the HIV-free burn-in, not fit to national vital statistics.
 
 ## Intervention
 | Parameter | Value(s) |
