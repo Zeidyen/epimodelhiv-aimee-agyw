@@ -149,12 +149,23 @@ probability equal to the scenario **reach**; while she was AGYW (15–24) and fr
 initiation rate by a PrEP rate ratio (with reached AGYW also rendered
 PrEP-eligible, consistent with their priority-population status).
 
-Rate ratios were derived from the Clover hazard ratios scaled by an assumed
-**causal fraction**, to address the observational nature of the effect sizes:
-`rate ratio = 1 + (HR − 1) × causal fraction`. We evaluated a full factorial grid
-of **reach** (10%, 30%, 50% of AGYW) × **causal fraction** (25% [conservative],
-50% [central], 100% [optimistic]), giving rate ratios of 1.28–2.11 for testing and
-1.31–2.22 for PrEP, plus a no-chatbot counterfactual baseline.
+Rate ratios were derived from the Clover hazard ratios (HR 2.11 for testing, 2.22
+for PrEP) scaled by an assumed **causal fraction**, to address the observational
+nature of the effect sizes: `rate ratio = 1 + (HR − 1) × causal fraction`. We
+evaluated a full factorial grid of **reach** (10%, 30%, 50% of AGYW) × **causal
+fraction** (Table 1), plus a no-chatbot counterfactual baseline — ten scenarios in
+total.
+
+**Table 1. Intervention scenario grid.** Rate ratios applied to the HIV-testing and
+PrEP-initiation rates of reached AGYW, by causal fraction; each was crossed with the
+three reach levels for a 3 × 3 factorial grid plus baseline.
+
+| Causal fraction | HIV-testing rate ratio | PrEP-initiation rate ratio |
+|---|---|---|
+| Conservative (25% of HR causal) | 1.28 | 1.31 |
+| Central (50% of HR causal) | 1.55 | 1.61 |
+| Optimistic (100% of HR causal) | 2.11 | 2.22 |
+| *crossed with reach:* | 10% / 30% / 50% of AGYW | + no-chatbot baseline |
 
 ### Implementation strategies: demand generation versus persistence support
 

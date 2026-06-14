@@ -3,7 +3,7 @@
 ## Calibrated baseline model
 
 The calibrated model reproduced the South African HIV epidemic trajectory from
-1990 to 2022 (Figure 2). Following HIV introduction in 1990, simulated HIV
+1990 to 2022 (Figure 1). Following HIV introduction in 1990, simulated HIV
 prevalence among women aged 15–24 rose through the 1990s, peaked at approximately
 15–16% in the early-to-mid 2000s, and declined to ~8% by 2022 as antiretroviral
 therapy scaled up — closely tracking the Thembisa estimates. Adult (15–49)
@@ -37,7 +37,8 @@ interquartile range 696,000–762,000). This baseline incorporates realistic ora
 discontinuation (≈6-month median retention), so that baseline PrEP coverage remained
 low (~3%, consistent with South African estimates) with rapid turnover. Introducing
 the chatbot in 2025 reduced this burden, with impact increasing monotonically with
-both reach and the assumed causal fraction of the observed engagement effect (Table 1).
+both reach and the assumed causal fraction of the observed engagement effect
+(Figure 2; Table 3).
 
 At **50% reach**, the chatbot averted an estimated **6.2% of AGYW infections
 (≈45,300; 95% CI 36,900–53,800; p < 0.001)** under the central assumption and
@@ -58,7 +59,7 @@ reached per infection averted), reflecting the dose–response of the interventi
 ## Mechanism
 
 The projected impact was driven by increased PrEP uptake among reached AGYW
-(Figure 5). In the counterfactual, PrEP coverage among AGYW remained near the
+(Figure 4). In the counterfactual, PrEP coverage among AGYW remained near the
 baseline level (~3%), with rapid turnover reflecting realistic oral-PrEP
 discontinuation. Following chatbot introduction in 2025, PrEP coverage among AGYW
 rose to approximately **8% at 30% reach, ~11% at 50% reach (central)**, and **~14%
@@ -67,13 +68,13 @@ optimistic (long-retention) discontinuation assumption, because realistic
 discontinuation continually erodes coverage and the chatbot must keep re-initiating
 to sustain it. Corresponding increases in HIV testing and diagnosis accompanied the
 PrEP gains. The incidence trajectories diverged from baseline after 2025, with the
-largest reductions under the highest reach and effect-size assumptions (Figure 5,
+largest reductions under the highest reach and effect-size assumptions (Figure 4,
 panel A).
 
 ## PrEP delivery strategy: demand generation versus persistence support
 
 A secondary analysis decomposed the 50%-reach effect into demand generation,
-persistence support, and their combination (Figure 6; Table 2). **Demand generation
+persistence support, and their combination (Figure 5; Table 4). **Demand generation
 alone** — the primary-analysis mechanism — averted 5.8% of AGYW infections (43,192;
 95% CI 25,852–60,531) and raised PrEP coverage from ~3% to ~11%, but coverage
 plateaued as initiated women continuously discontinued. **Persistence support
@@ -94,7 +95,7 @@ each additional initiator contributed more protected person-time.
 
 ---
 
-## Table 1. AGYW HIV infections averted by the Aimee chatbot, 2025–2035
+## Table 3. AGYW HIV infections averted by the Aimee chatbot, 2025–2035
 
 | Reach | Causal fraction | Infections averted (mean) | 95% CI | p | % averted |
 |---|---|---|---|---|---|
@@ -118,7 +119,7 @@ against the observed South African AGYW coverage gap (see text).
 
 ---
 
-## Table 2. PrEP delivery strategy — demand vs persistence (50% reach, central initiation)
+## Table 4. PrEP delivery strategy — demand vs persistence (50% reach, central initiation)
 
 | Strategy | Discontinuation reduction | Infections averted (mean) | 95% CI | p | % averted |
 |---|---|---|---|---|---|

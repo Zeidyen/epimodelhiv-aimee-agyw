@@ -293,10 +293,20 @@ para("The Aimee chatbot was represented not mechanistically but as a perturbatio
      "her HIV-testing rate was multiplied by a testing rate ratio and her PrEP "
      "initiation rate by a PrEP rate ratio (with reached AGYW also rendered "
      "PrEP-eligible, consistent with their priority-population status). Rate ratios were "
-     "derived from the Clover hazard ratios scaled by an assumed causal fraction: rate "
-     "ratio = 1 + (HR − 1) × causal fraction. We evaluated a full factorial grid of "
-     "reach (10%, 30%, 50% of AGYW) × causal fraction (25% [conservative], 50% "
-     "[central], 100% [optimistic]), plus a no-chatbot counterfactual baseline.")
+     "derived from the Clover hazard ratios (HR 2.11 for testing, 2.22 for PrEP) scaled "
+     "by an assumed causal fraction: rate ratio = 1 + (HR − 1) × causal fraction. We "
+     "evaluated a full factorial grid of reach (10%, 30%, 50% of AGYW) × causal fraction "
+     "(Table 1), plus a no-chatbot counterfactual baseline — ten scenarios in total.")
+add_table(
+    ["Causal fraction", "HIV-testing rate ratio", "PrEP-initiation rate ratio"],
+    [["Conservative (25% of HR causal)","1.28","1.31"],
+     ["Central (50% of HR causal)","1.55","1.61"],
+     ["Optimistic (100% of HR causal)","2.11","2.22"],
+     ["crossed with reach →","10% / 30% / 50% of AGYW","+ no-chatbot baseline"]],
+    caption="Table 1. Intervention scenario grid. Rate ratios applied to the HIV-testing "
+            "and PrEP-initiation rates of reached AGYW, by causal fraction; each crossed "
+            "with the three reach levels (3 × 3 factorial) plus a no-chatbot baseline.",
+    widths=[2.4, 2.1, 2.1])
 
 H2("Implementation strategies: demand generation versus persistence support")
 para("To inform how a chatbot programme should be designed, a secondary analysis "
@@ -372,7 +382,7 @@ add_table(
     [["AGYW (women 15–24)", "73%", "66%", "62%", "~74% dx, ~68% suppressed"],
      ["Adults (15–49)", "89%", "81%", "78%", "~90% dx, ~77% suppressed"],
      ["Men 25–34", "84%", "78%", "76%", "~66% suppressed"]],
-    caption="Table 1. Model care cascade vs South African estimates, 2022 (% of HIV-positive in group).",
+    caption="Table 2. Model care cascade vs South African estimates, 2022 (% of HIV-positive in group).",
     widths=[1.7,1.0,0.9,1.1,1.9])
 
 H2("Projected impact of the Aimee chatbot, 2025–2035")
@@ -383,7 +393,7 @@ para("In the no-chatbot counterfactual, the model projected approximately 733,00
      "consistent with South African estimates) with rapid turnover. Introducing the "
      "chatbot in 2025 reduced this burden, with impact increasing monotonically with both "
      "reach and the assumed causal fraction of the observed engagement effect "
-     "(Figure 2; Table 2).")
+     "(Figure 2; Table 3).")
 para("At 50% reach, the chatbot averted an estimated **6.2% of AGYW infections "
      "(45,333; 95% CI 36,884–53,782; p < 0.001)** under the central assumption and "
      "**10.3% (75,191; 65,724–84,659; p < 0.001)** under the optimistic assumption; even "
@@ -407,7 +417,7 @@ add_table(
      ["50%","Central","45,333","36,884 – 53,782","<0.001","6.2%"],
      ["50%","Optimistic","75,191","65,724 – 84,659","<0.001","10.3%"]],
     bold_row_idx={0,2,3,4,5,6,7,8},
-    caption="Table 2. AGYW HIV infections averted by the Aimee chatbot, 2025–2035.",
+    caption="Table 3. AGYW HIV infections averted by the Aimee chatbot, 2025–2035.",
     widths=[0.6,1.2,1.5,1.5,0.6,0.8])
 para("Baseline (no chatbot): ~732,899 national AGYW HIV infections 2025–2035 (median; "
      "mean 727,129; IQR 696,130–762,040). Bold rows: 95% CI excludes zero. Estimates are "
@@ -431,7 +441,7 @@ para("The projected impact was driven by increased PrEP uptake among reached AGY
 
 H2("PrEP delivery strategy: demand generation versus persistence support")
 para("A secondary analysis decomposed the 50%-reach effect into demand generation, "
-     "persistence support, and their combination (Figure 5; Table 3). Demand generation alone — "
+     "persistence support, and their combination (Figure 5; Table 4). Demand generation alone — "
      "the primary-analysis mechanism — averted 5.8% of AGYW infections (43,192; 95% CI "
      "25,852–60,531) and raised PrEP coverage from ~3% to ~11%, but coverage plateaued "
      "as initiated women continuously discontinued. Persistence support alone, which "
@@ -459,7 +469,7 @@ add_table(
      ["Both","40%","86,480","73,222 – 99,738","<0.001","11.6%"],
      ["Both","60%","108,253","90,444 – 126,063","<0.001","14.5%"]],
     bold_row_idx={0,2,3,4,5,6},
-    caption="Table 3. PrEP delivery strategy — demand vs persistence (50% reach, central initiation).",
+    caption="Table 4. PrEP delivery strategy — demand vs persistence (50% reach, central initiation).",
     widths=[1.3,1.0,1.6,1.4,0.6,0.8])
 para("Baseline ~747,703 national AGYW infections. Demand only = expand eligibility + "
      "boost initiation; Persistence only = reduce discontinuation among reached AGYW on "
