@@ -7,22 +7,26 @@ trajectory, "data"/"literature" indicates a fixed input.
 ## Transmission and susceptibility
 | Parameter | Value | Source / note |
 |---|---|---|
-| Per-act transmission probability | 0.0035 | **Calibrated** to SA trajectory |
-| Sex acts per week, main / casual | 5 / 2 | Calibrated (within plausible range) |
-| Relative infectiousness, acute / AIDS | 5× / 2× | Literature (vs chronic reference) |
-| Relative infectiousness on ART, unsuppressed / suppressed | 0.30 / 0.01 | Literature (treatment-as-prevention) |
-| AGYW susceptibility multiplier, 15–19 / 20–24 | 2.0 / 1.5 | Literature (elevated young-women risk) |
-| PrEP efficacy (per-act acquisition reduction) | 0.95 | Literature (consistent oral/injectable PrEP) |
+| Per-act transmission probability | 0.0035 | **Calibrated** to SA trajectory; plausible range [7, 8] |
+| Sex acts per week, main / casual | 5 / 2 | Casual ≈2/wk [22]; main a modelling assumption ᵃ |
+| Relative infectiousness, acute / AIDS | 5× / 2× | Literature (vs chronic reference) [9, 10] |
+| Relative infectiousness on ART, unsuppressed / suppressed | 0.30 / 0.01 | Treatment-as-prevention [11, 12, 13, 14] |
+| AGYW susceptibility multiplier, 15–19 / 20–24 | 2.0 / 1.5 | Elevated young-women risk [19] |
+| PrEP efficacy (per-act acquisition reduction) | 0.95 | Oral/injectable PrEP at high adherence [15, 16, 17] |
 
 ## Partnership network
 | Parameter | Value | Source / note |
 |---|---|---|
-| Mean degree, main / casual | 0.50 / 0.35 | Aimee cohort (≈1.71 past-year partners) |
-| Concurrency target, main / casual | 4% / 10% | Bounded by mean degree |
-| Age-mixing breadth, main / casual | 8 / 9 | Set to mean AGYW partner gap ≈7.7y, 34% with men ≥30 |
-| Preferred partner age gap (AGYW) | 5 years | SA age-disparate literature |
-| Partnership duration, main / casual | 200 / 26 weeks | Literature |
+| Mean degree, main / casual | 0.50 / 0.35 | Aimee cohort (≈1.71 past-year partners) [1] |
+| Concurrency target, main / casual | 4% / 10% | Bounded by mean degree; concurrency in generalised epidemics [5, 6] |
+| Age-mixing breadth, main / casual | 8 / 9 | Set to realised AGYW partner gap ≈7.7y, 34% with men ≥30 [20, 21] |
+| Preferred partner age gap (AGYW) | 5 years | SA age-disparate ("blesser") literature [20, 21] |
+| Partnership duration, main / casual | 200 / 26 weeks | Modelling assumption (cf. network models [6]) ᵃ |
 | Sex ratio (proportion male) | 0.50 | Assumption |
+
+ᵃ Main-partner coital frequency (5/week) and partnership durations (200/26 weeks)
+are modelling assumptions within plausible ranges; empirical SA data support a casual
+frequency of ≈2 acts/week [22].
 
 ## Disease progression (per week)
 | Parameter | Value | Implied duration |
@@ -42,15 +46,26 @@ trajectory, "data"/"literature" indicates a fixed input.
 | ART re-initiation | 0.10 |
 | Viral suppression | 0.30 |
 | ART discontinuation | 0.01 |
-| ART scale-up window | ramp 2004 → 2014 |
+| ART scale-up window | ramp 2004 → 2014 [23] |
+
+Care-cascade transition rates were fixed a priori from the reference model and were
+*not* tuned to any coverage target; only the ART-availability timing (ramp 2004→2014)
+was imposed from South Africa's documented roll-out [23]. The model's reproduction of
+the observed SA cascade — including the AGYW shortfall — is therefore an out-of-sample
+validation (see Results).
 
 ## PrEP (per week, baseline)
 | Parameter | Value |
 |---|---|
 | Initial PrEP coverage (eligible) | 0.02 |
-| PrEP initiation rate | 0.005 |
-| PrEP discontinuation rate | 0.027 (≈6-month median retention; SA oral-PrEP literature) |
+| PrEP initiation rate | 0.005 (modelling assumption) |
+| PrEP discontinuation rate | 0.027 (≈6-month median retention) [18] ᵇ |
 | PrEP indication degree threshold | 2 |
+
+ᵇ The discontinuation rate corresponds to a ≈6-month median time on PrEP, presented
+as consistent with the poor oral-PrEP continuation documented among South African
+AGYW [18]; HPTN 082 [18] followed participants for 12 months, so this is the model's
+implied retention rather than a directly measured median.
 
 The PrEP discontinuation rate is set to reflect the documented poor continuation of
 oral PrEP among South African AGYW (median retention on the order of months rather

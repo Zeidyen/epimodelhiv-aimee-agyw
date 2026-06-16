@@ -572,20 +572,33 @@ para("In conclusion, under assumptions calibrated to the real South African HIV 
 doc.add_page_break()
 H1("References")
 refs = [
- "[Clover/Aimee field study] — authors' own field-study manuscript/report providing the cohort, engagement, HIV-testing and PrEP-uptake data and effect sizes. [Complete citation.]",
- "Jenness SM, Goodreau SM, Morris M. EpiModel: An R Package for Mathematical Modeling of Infectious Disease over Networks. J Stat Softw. 2018;84(8):1–47.",
- "Morris M, Kretzschmar M. Concurrent partnerships and the spread of HIV. AIDS. 1997;11(5):641–648.",
+ "[Clover/Aimee field study] — authors' own field-study manuscript/report providing the cohort, engagement, HIV-testing and PrEP-uptake data, partnership degree, and effect sizes (HR 2.11 testing, 2.22 PrEP; analytic N = 9,310). [Complete citation; must be citable for submission.]",
+ "Jenness SM, Goodreau SM, Morris M. EpiModel: an R package for mathematical modeling of infectious disease over networks. J Stat Softw. 2018;84(8):1–47. PMID 29731699.",
+ "Handcock MS, Hunter DR, Butts CT, Goodreau SM, Morris M. statnet: software tools for the representation, visualization, analysis and simulation of network data. J Stat Softw. 2008;24(1). PMID 18618019.",
  "R Core Team. R: A Language and Environment for Statistical Computing. R Foundation for Statistical Computing; 2024.",
- "Handcock MS, Hunter DR, Butts CT, Goodreau SM, Morris M. statnet: Software tools for the representation, visualization, analysis and simulation of network data. J Stat Softw. 2008;24(1).",
- "Johnson LF, Dorrington RE. Thembisa version 5.0: A model for evaluating the impact of HIV/AIDS in South Africa. University of Cape Town; 2024. https://www.thembisa.org.",
+ "Morris M, Kretzschmar M. Concurrent partnerships and the spread of HIV. AIDS. 1997;11(5):641–648. PMID 9108946.",
+ "Goodreau SM, Cassels S, Kasprzyk D, et al. Concurrent partnerships, acute infection and HIV epidemic dynamics among young adults in Zimbabwe. AIDS Behav. 2012;16(2):312–322. PMID 21190074.",
+ "Boily MC, Baggaley RF, Wang L, et al. Heterosexual risk of HIV-1 infection per sexual act: systematic review and meta-analysis of observational studies. Lancet Infect Dis. 2009;9(2):118–129. PMID 19179227.",
+ "Hughes JP, Baeten JM, Lingappa JR, et al. Determinants of per-coital-act HIV-1 infectivity among African HIV-1-serodiscordant couples. J Infect Dis. 2012;205(3):358–365. PMID 22241800.",
+ "Wawer MJ, Gray RH, Sewankambo NK, et al. Rates of HIV-1 transmission per coital act, by stage of HIV-1 infection, in Rakai, Uganda. J Infect Dis. 2005;191(9):1403–1409. PMID 15809897.",
+ "Hollingsworth TD, Anderson RM, Fraser C. HIV-1 transmission, by stage of infection. J Infect Dis. 2008;198(5):687–693. PMID 18662132.",
+ "Cohen MS, Chen YQ, McCauley M, et al.; HPTN 052 Study Team. Prevention of HIV-1 infection with early antiretroviral therapy. N Engl J Med. 2011;365(6):493–505. PMID 21767103.",
+ "Cohen MS, Chen YQ, McCauley M, et al.; HPTN 052 Study Team. Antiretroviral therapy for the prevention of HIV-1 transmission. N Engl J Med. 2016;375(9):830–839. PMID 27424812.",
+ "Quinn TC, Wawer MJ, Sewankambo N, et al. Viral load and heterosexual transmission of HIV type 1. N Engl J Med. 2000;342(13):921–929. PMID 10738050.",
+ "Donnell D, Baeten JM, Kiarie J, et al. Heterosexual HIV-1 transmission after initiation of antiretroviral therapy. Lancet. 2010;375(9731):2092–2098. PMID 20537376.",
+ "Grant RM, Lama JR, Anderson PL, et al.; iPrEx Study Team. Preexposure chemoprophylaxis for HIV prevention in men who have sex with men. N Engl J Med. 2010;363(27):2587–2599. PMID 21091279.",
+ "Baeten JM, Donnell D, Ndase P, et al.; Partners PrEP Study Team. Antiretroviral prophylaxis for HIV prevention in heterosexual men and women. N Engl J Med. 2012;367(5):399–410. PMID 22784037.",
+ "Delany-Moretlwe S, Hughes JP, Bock P, et al.; HPTN 084 study group. Cabotegravir for the prevention of HIV-1 in women: results from HPTN 084. Lancet. 2022;399(10337):1779–1789. PMID 35378077.",
+ "Celum C, Hosek S, Tsholwana M, et al. PrEP uptake, persistence, adherence, and effect of retrospective drug-level feedback on PrEP adherence among young women in southern Africa (HPTN 082). PLoS Med. 2021;18(6):e1003670. PMID 34143779.",
+ "Dellar RC, Dlamini S, Abdool Karim Q. Adolescent girls and young women: key populations for HIV epidemic control. J Int AIDS Soc. 2015;18(2 Suppl 1):19408. PMID 25724504.",
+ "Maughan-Brown B, Kenyon C, Lurie MN. Partner age differences and concurrency in South Africa: implications for HIV-infection risk among young women. AIDS Behav. 2014;18(12):2469–2476. PMID 25047687.",
+ "Stoner MCD, Nguyen N, Kilburn K, et al. Age-disparate partnerships and incident HIV infection in adolescent girls and young women in rural South Africa (HPTN 068). AIDS. 2019;33(1):83–91. PMID 30289813.",
+ "Delva W, Meng F, Beauclair R, et al. Coital frequency and condom use in monogamous and concurrent sexual relationships in Cape Town, South Africa. J Int AIDS Soc. 2013;16(1):18034. PMID 23618365.",
+ "Johnson LF. Access to antiretroviral treatment in South Africa, 2004–2011. South Afr J HIV Med. 2012;13(1):22–27.",
+ "Johnson LF, Dorrington RE. Thembisa version 5.0: a model for evaluating the impact of HIV/AIDS in South Africa. University of Cape Town; 2024. thembisa.org. [Pin the exact version used.]",
  "Human Sciences Research Council. The Sixth South African National HIV Prevalence, Incidence, Behaviour and Communication Survey (SABSSM VI), 2022. HSRC; 2023.",
- "Maughan-Brown B, Kenyon C, Lurie MN. Partner age differences and concurrency in South Africa: Implications for HIV-infection risk among young women. AIDS Behav. 2014;18(12):2469–2476.",
- "[HPTN 068] Age-disparate partnerships and incident HIV infection in adolescent girls and young women in rural South Africa. AIDS. 2019;33(1).",
- "[EMOD-HIV western Kenya] Health and economic impact of oral PrEP provision across subgroups in western Kenya: a modelling analysis. 2025. [PubMed 39800385.]",
- "EpiModel PrEP intervention studies (initiation/adherence/persistence; percent infections averted). EpiModel/PrEP-Optimize and related publications.",
- "Noise-free comparison of stochastic agent-based simulations using common random numbers. 2024. arXiv:2409.02086.",
- "[PrEP efficacy] — relevant oral TDF/FTC or injectable cabotegravir/lenacapavir trial for the per-act efficacy assumption. [Complete citation.]",
- "[ART treatment-as-prevention] HPTN 052 or equivalent for the near-zero infectiousness of virally suppressed individuals. [Complete citation.]",
+ "[EMOD-HIV western Kenya] Health and economic impact of oral PrEP provision across subgroups in western Kenya: a modelling analysis. 2025. [PubMed 39800385 — complete citation.]",
+ "Noise-free comparison of stochastic agent-based simulations using common random numbers. 2024. arXiv:2409.02086. [Or a peer-reviewed CRN reference.]",
 ]
 for i, r in enumerate(refs, 1):
     p = doc.add_paragraph(); p.paragraph_format.left_indent = Inches(0.3)
@@ -635,29 +648,40 @@ para("Per-time-step rates are weekly. Values are from the calibrated model; "
      "“calibrated” indicates a value fit to the SA trajectory, "
      "“data”/“literature” indicates a fixed input.", italic=True, size=9)
 add_table(["Parameter","Value","Source / note"],
- [["Per-act transmission probability","0.0035","Calibrated to SA trajectory"],
-  ["Sex acts per week, main / casual","5 / 2","Calibrated (plausible range)"],
-  ["Relative infectiousness, acute / AIDS","5× / 2×","Literature"],
-  ["Rel. infectiousness on ART, unsupp. / supp.","0.30 / 0.01","Literature (TasP)"],
-  ["AGYW susceptibility, 15–19 / 20–24","2.0 / 1.5","Literature"],
-  ["PrEP efficacy (per-act)","0.95","Literature"],
-  ["Mean degree, main / casual","0.50 / 0.35","Aimee cohort (≈1.71 past-year partners)"],
-  ["Concurrency, main / casual","4% / 10%","Bounded by mean degree"],
-  ["Age-mixing breadth, main / casual","8 / 9","AGYW partner gap ≈7.7y; 34% men ≥30"],
-  ["Preferred partner age gap (AGYW)","5 years","SA age-disparate literature"],
-  ["Partnership duration, main / casual","200 / 26 weeks","Literature"],
-  ["HIV testing/diagnosis rate","0.01 / week","Calibrated/literature"],
-  ["Linkage to ART","0.50 / week","Cascade"],
-  ["Viral suppression","0.30 / week","Cascade"],
-  ["ART discontinuation","0.01 / week","Cascade"],
-  ["ART scale-up window","ramp 2004 → 2014","SA roll-out"],
-  ["PrEP initiation rate","0.005 / week","Literature"],
-  ["PrEP discontinuation rate","0.027 / week","≈6-mo median retention (SA oral PrEP)"],
-  ["HIV seed year / prevalence","1990 / 0.8%","Calibration setup"],
+ [["Per-act transmission probability","0.0035","Calibrated; range [7, 8]"],
+  ["Sex acts per week, main / casual","5 / 2","Casual ≈2/wk [22]; main assumption ᵃ"],
+  ["Relative infectiousness, acute / AIDS","5× / 2×","Literature [9, 10]"],
+  ["Rel. infectiousness on ART, unsupp. / supp.","0.30 / 0.01","TasP [11, 12, 13, 14]"],
+  ["AGYW susceptibility, 15–19 / 20–24","2.0 / 1.5","Young-women risk [19]"],
+  ["PrEP efficacy (per-act)","0.95","High-adherence oral/injectable [15, 16, 17]"],
+  ["Mean degree, main / casual","0.50 / 0.35","Aimee cohort (≈1.71 partners) [1]"],
+  ["Concurrency, main / casual","4% / 10%","Bounded by degree [5, 6]"],
+  ["Age-mixing breadth, main / casual","8 / 9","Realised AGYW gap ≈7.7y; 34% men ≥30 [20, 21]"],
+  ["Preferred partner age gap (AGYW)","5 years","SA age-disparate literature [20, 21]"],
+  ["Partnership duration, main / casual","200 / 26 weeks","Modelling assumption (cf. [6]) ᵃ"],
+  ["HIV testing/diagnosis rate","0.01 / week","Reference model; validated vs SA cascade"],
+  ["Linkage to ART","0.50 / week","Reference model; validated vs SA cascade"],
+  ["Viral suppression","0.30 / week","Reference model; validated vs SA cascade"],
+  ["ART discontinuation","0.01 / week","Reference model"],
+  ["ART scale-up window","ramp 2004 → 2014","SA roll-out [23]"],
+  ["PrEP initiation rate","0.005 / week","Modelling assumption"],
+  ["PrEP discontinuation rate","0.027 / week","≈6-mo median retention [18] ᵇ"],
+  ["HIV seed year / prevalence","1990 / 0.8%","Calibration setup; Thembisa [24]"],
   ["Demographic burn-in","1965–1990 (HIV-free)","Calibration setup"],
-  ["National AGYW population (scaling)","5,071,746","Thembisa 2022"],
+  ["National AGYW population (scaling)","5,071,746","Thembisa v5.0 [24]"],
   ["Replicates / population size","96 / 20,000","Simulation design"]],
- widths=[2.6,1.5,2.5])
+ widths=[2.5,1.3,2.8])
+para("ᵃ Main-partner coital frequency (5/week) and partnership durations (200/26 "
+     "weeks) are modelling assumptions within plausible ranges; empirical South "
+     "African data support a casual frequency of ≈2 acts/week [22]. ᵇ The "
+     "discontinuation rate corresponds to a ≈6-month median time on PrEP, presented "
+     "as consistent with poor oral-PrEP continuation among South African AGYW [18] "
+     "(HPTN 082 followed participants for 12 months, so this is the model's implied "
+     "retention, not a directly measured median). Care-cascade transition rates were "
+     "fixed a priori from the reference model — not tuned to any coverage target; "
+     "only the ART-availability timing was imposed from SA's roll-out, so the model's "
+     "reproduction of the observed cascade is an out-of-sample validation (Results).",
+     italic=True, size=8)
 
 H2("Table S2. Calibration targets (Thembisa v5.0, 2022)")
 add_table(["Target","Value"],
